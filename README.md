@@ -15,9 +15,10 @@
 | 제품 영상 | 실제 앱 화면을 이용한 시연, 기능 설명, 제품 광고 | HTML, MP4 |
 | 모션 쇼릴 | 브랜드 모티프 변형, 음악 박자에 맞춘 구성 | 영상 |
 | 촬영본 편집 | 구간 삭제, 전사 기반 무음 제거, 자막과 보조 장면 구성 | 편집 영상, 편집 결정 목록, 재배치된 전사문 |
-| 발표 자료 | 장별 모션 그래픽, 키보드 탐색, 발표자가 제어하는 화면 전환, PowerPoint 기본 애니메이션(이동 경로, 회전 등) | HTML 발표 자료, PowerPoint(`.pptx`) |
+| PowerPoint 시각 요소 | 다이어그램, 스마트아트, 도형과 연결선, 그래픽 효과, 데이터 차트, 애니메이션과 전환 | 편집 가능한 PowerPoint(`.pptx`), 필요할 때 미리보기 |
+| 발표 자료 | 장별 구성과 모션 그래픽, 키보드 탐색, 발표자가 제어하는 화면 전환 | HTML 발표 자료, PowerPoint(`.pptx`) |
 
-기존 프로젝트는 사용하는 엔진과 파일 형식을 유지합니다. PowerPoint 파일은 python-pptx로 편집 가능한 도형과 PowerPoint 기본 애니메이션을 넣어 만들고, Microsoft PowerPoint가 있으면 실제 재생을 확인합니다. 그 밖의 형식은 실행 환경에 있는 편집 도구의 지원 범위를 따릅니다.
+기존 프로젝트는 사용하는 엔진과 파일 형식을 유지합니다. PowerPoint는 단독 시각 요소 요청도 처리하며, 내용에 맞는 도식 선택, 기존 스타일 계승, 배치 정리와 접근성, 선택적 견본 재사용을 다룹니다. [PowerPoint 전문 모듈](references/powerpoint.md)은 실제 스마트아트와 네이티브 효과에 PowerPoint 자체 자동화를 우선하고, 파일 생성만 가능한 환경에서는 도구의 지원 범위를 따릅니다. 편집 가능한 개체, 데이터와 실제 재생의 검증을 구분합니다.
 
 ## 시작하기
 
@@ -129,7 +130,8 @@ Antigravity와 OpenCode를 포함해 여러 에이전트에 공통 배포하려�
 | --- | --- |
 | Blender 작업 | [Blender](https://www.blender.org/download/) 또는 사용 가능한 Blender 연결 도구 |
 | HTML 발표 자료 재생 | 브라우저 |
-| PowerPoint(`.pptx`) 제작 | Python과 [python-pptx](https://python-pptx.readthedocs.io/), 재생 확인은 Windows의 Microsoft PowerPoint |
+| PowerPoint 시각 요소와 효과 | 지원 기능을 확인한 편집 연결 도구 또는 Windows Microsoft PowerPoint(COM, PowerShell이나 사용 가능한 Python COM 연결) |
+| PowerPoint 기본 도형과 파일 생성 | Python과 [python-pptx](https://python-pptx.readthedocs.io/) 등 지원되는 생성 도구. 네이티브 편집과 재생 확인은 별도 환경 필요 |
 | 박자표 계산 | [Node.js](https://nodejs.org/en/download) |
 | 전사 기반 편집 계획 | Node.js, 시각이 있는 전사문(단어 또는 구간 단위) |
 | 로컬 전사 | Whisper 지원 FFmpeg 8.0 이상과 [whisper.cpp 모델](https://huggingface.co/ggerganov/whisper.cpp), 또는 다른 로컬 전사 도구 |
@@ -185,6 +187,16 @@ $chojema-visual 왼쪽 끝의 축구공이 오른쪽 끝까지 굴러가는 슬�
 PowerPoint 파일로 만들어 줘. 공은 편집할 수 있는 도형으로 그려 줘.
 ```
 
+**기존 슬라이드의 시각 요소**
+
+```text
+$chojema-visual proposal.pptx의 3쪽 설명을 편집 가능한 흐름도로 바꿔 줘.
+기존 테마와 글꼴을 따르고, 연결선과 단계별 클릭 애니메이션을 넣어 줘.
+다른 슬라이드는 보존하고 output/proposal-v2.pptx로 저장해 줘.
+```
+
+실제 스마트아트가 필요하면 ‘도형 재현이 아닌 실제 스마트아트’를 지정할 수 있습니다. 전환 효과와 데이터 차트도 요청할 수 있으며, 적용과 검증은 실행 환경의 지원 범위를 따릅니다.
+
 복합 작업에서는 촬영본 편집, 3D 장면, 2D 그래픽과 음향을 필요한 순서로 연결할 수 있습니다. 최종 파일 형식과 함께 원본 프로젝트가 필요한지도 지정하면 좋습니다.
 
 ## 작업에 맞춰 읽는 구조
@@ -203,7 +215,7 @@ PowerPoint 파일로 만들어 줘. 공은 편집할 수 있는 도형으로 그
 | --- | --- |
 | [SKILL.md](SKILL.md) | 스킬 식별자, 작업 선택과 공통 제작 지침 |
 | [agents/openai.yaml](agents/openai.yaml) | 표시 이름과 기본 호출 문구 |
-| `references/` | 3D, 2D 모션, 제품 영상, 쇼릴, 편집, 발표 자료, 렌더링, 오디오 지침 |
+| `references/` | 3D, 2D 모션, 제품 영상, 쇼릴, 편집, PowerPoint 시각 요소, 발표 자료, 렌더링, 오디오 지침 |
 | `scripts/` | HTML 영상 렌더러, 전사 기반 편집, 박자표 계산 도구 |
 | `assets/` | HTML 영상과 발표 자료 견본, Blender 장면 견본, 서식, 합성 오디오, 한국어 글꼴 3종(Pretendard, Gowun Batang, Gowun Dodum. 용도는 [실행 환경과 자료 출처](references/sources.md)) |
 | [tests/helpers.test.mjs](tests/helpers.test.mjs) | 편집, 전사 변환, 박자표, HTML 렌더러, Blender 견본의 자동 검사 |
@@ -259,6 +271,10 @@ node --test tests/helpers.test.mjs
 | Blender 5.2.3 LTS | 견본 장면 생성, EEVEE 미리보기와 72프레임 전체 렌더, BT.709 MP4 인코딩, 재질 색과 회전 확인 |
 
 별도 HyperFrames 프로젝트 제작과 macOS의 PowerPoint 재생은 이 검증에 포함하지 않았습니다. PowerPoint는 이동 경로와 회전만 확인했으므로 다른 애니메이션 효과는 실제 작업 환경에서 확인해야 합니다.
+
+버전 1.4.0의 PowerPoint 전문 모듈은 2026. 11. 09.에 PowerPoint 16.0과 Python 3.13 COM 경로로 추가 확인했습니다. 실제 스마트아트와 한글 문구, 도형 이동 후 연결선 유지, 내장 차트 데이터와 값 보존, 도형 병합, 애니메이션과 전환의 저장·재열기, 창 모드 슬라이드 쇼의 클릭 진행 등 주요 검사 12개가 통과했고 정지 렌더 4장을 확인했습니다. 초기 PowerShell COM 시험은 완료하지 못해 Python 경로로 전환했으며, PowerShell 경로 전체를 검증한 것은 아닙니다.
+
+모핑, 모든 효과와 스마트아트 레이아웃, 개체 클릭 트리거, SVG 경로 편집, 기존 복합 자료의 스타일 계승, 접근성 UI, 다른 운영체제와 에이전트의 실제 스킬 재로딩은 미검증입니다. 이 모듈은 제작 지침이며 작업마다 사용 가능한 도구로 수행합니다. 패키지 기본 자동 검사 17개 중 15개가 통과했고 HTML 실제 렌더와 Blender 검사 2개는 환경 변수를 지정하지 않아 건너뛰었습니다. 위 1.3.1의 전체 렌더 검증 기록과 구분합니다.
 
 ## 자료와 결과물 관리
 

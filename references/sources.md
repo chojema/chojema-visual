@@ -12,7 +12,10 @@
 | 로컬 전사 | Whisper 지원 FFmpeg(8.0 이상)와 whisper.cpp 모델 파일, 또는 다른 로컬 전사 도구 |
 | 박자표 계산 | Node.js |
 | HTML 발표 자료 | 브라우저 |
-| PowerPoint 제작과 재생 확인 | Python과 python-pptx, 재생 확인은 Windows의 Microsoft PowerPoint(COM) |
+| PowerPoint 시각 요소와 네이티브 효과 | 지원 기능을 확인한 편집 연결 도구 또는 Windows Microsoft PowerPoint(COM). PowerShell이나 사용 가능한 Python COM 연결을 이용한다. |
+| PowerPoint 기본 도형과 파일 생성 | Python과 python-pptx 등 지원되는 파일 생성 도구. 실제 스마트아트와 효과 지원은 별도로 확인한다. |
+
+PowerPoint의 도구 선택, 편집 가능성과 검증 기준은 [PowerPoint 시각 요소](powerpoint.md)를 따른다. 자체 자동화를 사용할 수 있으면 실제 스마트아트와 네이티브 효과는 그 경로를 우선한다. 파일 생성만 가능한 환경에서는 지원 범위를 넘는 편집과 재생을 보장하지 않는다.
 
 `scripts/cut-silences.mjs`와 `scripts/apply-cuts.mjs`는 `media-edit.mjs`의 입력 검증, 시간표 계산, 파일 보호와 FFmpeg 출력을 공유한다. `whisper-transcript.mjs`는 Whisper 출력을 편집 도구의 전사문 형식으로 바꾼다. `beatgrid.mjs`는 일정한 박자 간격을 프레임 표로 계산한다. 실행 옵션은 각 도구의 `--help`로 확인한다.
 

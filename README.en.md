@@ -17,9 +17,10 @@ The skill's description is written so agents recognize requests in English or Ko
 | Product videos | Demos built from real app screens, feature explainers, product ads | HTML, MP4 |
 | Motion showreels | Brand motif transformations, music-synced cuts | Video |
 | Footage editing | Trims, transcript-based silence removal, captions and B-roll | Edited video, edit decision list, retimed transcript |
-| Presentations | Per-slide motion graphics, keyboard navigation, presenter-controlled transitions, native PowerPoint animations (motion paths, spins and more) | HTML slide deck, PowerPoint (`.pptx`) |
+| PowerPoint visual elements | Diagrams, SmartArt, shapes and connectors, graphic effects, data charts, animations and slide transitions | Editable PowerPoint (`.pptx`), previews when needed |
+| Presentations | Slide structure, per-slide motion graphics, keyboard navigation, presenter-controlled transitions | HTML slide deck, PowerPoint (`.pptx`) |
 
-Existing projects keep their engine and file formats. PowerPoint files are built with python-pptx using editable shapes and native PowerPoint animations, and playback is checked when Microsoft PowerPoint is available. Other formats depend on what the editing tools in your environment support.
+Existing projects keep their engine and file formats. PowerPoint requests can cover a single visual element, including diagram selection, matching existing styles, layout and accessibility checks, and optional reusable samples. The [PowerPoint module](references/powerpoint.md) (in Korean) prefers PowerPoint automation for actual SmartArt and native effects; environments limited to file generation stay within their tools' capabilities. Editable objects, chart data, and playback are checked separately.
 
 ## Getting started
 
@@ -131,7 +132,8 @@ Prepare only the tools your task needs. The skill provides production instructio
 | --- | --- |
 | Blender work | [Blender](https://www.blender.org/download/) or an available Blender connector |
 | Playing HTML slide decks | A browser |
-| Building PowerPoint (`.pptx`) files | Python and [python-pptx](https://python-pptx.readthedocs.io/); Microsoft PowerPoint on Windows to check playback |
+| PowerPoint visual elements and effects | An editing connector with verified support, or Microsoft PowerPoint on Windows (COM through PowerShell or an available Python COM bridge) |
+| PowerPoint basic shapes and file generation | Python and [python-pptx](https://python-pptx.readthedocs.io/) or another supported generator; native editing and playback checks require a separate compatible environment |
 | Beat grid calculation | [Node.js](https://nodejs.org/en/download) |
 | Transcript-based edit plans | Node.js and a timed transcript (word or segment level) |
 | Local transcription | FFmpeg 8.0 or later with Whisper support and a [whisper.cpp model](https://huggingface.co/ggerganov/whisper.cpp), or another local transcription tool |
@@ -187,6 +189,16 @@ $chojema-visual Make a PowerPoint slide where a soccer ball rolls from the left 
 to the right edge. Draw the ball with editable shapes.
 ```
 
+**Visual elements in an existing slide**
+
+```text
+$chojema-visual Replace the explanation on slide 3 of proposal.pptx with an editable flowchart.
+Match the existing theme and fonts, and add attached connectors and click-by-click build animations.
+Preserve the other slides and save output/proposal-v2.pptx.
+```
+
+Specify actual SmartArt when you need a SmartArt object rather than a diagram recreated with shapes. You can also request slide transitions and data charts; execution and verification depend on the available tools.
+
 Larger productions can chain footage editing, 3D scenes, 2D graphics and sound in whatever order the work needs. It helps to state the final file format and whether you also want the source project.
 
 ## Loaded as the work requires
@@ -205,7 +217,7 @@ This design limits what is read to the type and size of the task; it is not a me
 | --- | --- |
 | [SKILL.md](SKILL.md) | Skill identifier, task routing and shared production rules |
 | [agents/openai.yaml](agents/openai.yaml) | Display name and default prompt |
-| `references/` | Guides for 3D, 2D motion, product videos, showreels, editing, presentations, rendering and audio (in Korean) |
+| `references/` | Guides for 3D, 2D motion, product videos, showreels, editing, PowerPoint visual elements, presentations, rendering and audio (in Korean) |
 | `scripts/` | HTML video renderer, transcript-based editing tools, beat grid calculator |
 | `assets/` | HTML video and slide deck samples, Blender scene sample, templates, synthesized audio, three Korean fonts (Pretendard, Gowun Batang, Gowun Dodum; usage in [runtime and sources](references/sources.md), in Korean) |
 | [tests/helpers.test.mjs](tests/helpers.test.mjs) | Automated tests for editing, transcript conversion, beat grid, HTML renderer and Blender sample |
@@ -261,6 +273,10 @@ The following was verified for version 1.3.1 on 2026-11-09.
 | Blender 5.2.3 LTS | Sample scene creation, EEVEE previews and a full 72-frame render, BT.709 MP4 encoding, material colors and rotation |
 
 Separate HyperFrames projects and PowerPoint playback on macOS were not part of this verification. Only motion path and spin effects were checked in PowerPoint, so check other animation effects in your own environment.
+
+The PowerPoint module in version 1.4.0 was additionally checked on November 9, 2026, using PowerPoint 16.0 and Python 3.13 COM automation. Twelve key checks passed, covering real SmartArt and Korean text, attached connectors after moving a shape, embedded chart data and retained values, shape merging, saved and reopened animations and transitions, and click progression in a windowed slide show. Four static renders were inspected. The initial PowerShell COM test did not complete, so testing switched to Python; the full PowerShell path is not verified.
+
+Morph, all effects and SmartArt layouts, object-click triggers, SVG path editing, matching styles in existing complex decks, accessibility UI checks, other operating systems, and actual skill reloading in other agents remain unverified. The module provides production instructions and uses the tools available for each task. Of the 17 basic package tests, 15 passed; real HTML rendering and Blender tests were skipped because their environment variables were not set. These results are separate from the full rendering checks recorded above for version 1.3.1.
 
 ## Sources and outputs
 

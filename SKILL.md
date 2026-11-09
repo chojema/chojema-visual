@@ -1,10 +1,10 @@
 ---
 name: chojema-visual
-description: Creates or edits visual content using only the production modules a request needs - Blender 3D modeling, materials, lighting, still renders and 3D animation; 2D motion graphics, kinetic typography and HTML/SVG/Canvas scenes rendered to MP4; product ads and app demo videos; music-synced brand showreels; footage editing (trims, silence and mistake removal from transcripts, Whisper transcription, subtitles, compositing, audio mix and loudness); and animated HTML slide decks or PowerPoint (.pptx) files with native animations. Use for anything from a single model, shot or slide fix to multi-scene productions, whether the request is in English or Korean (블렌더, 3D 애니메이션, 모션 그래픽, 제품 영상, 앱 시연, 쇼릴, 영상 편집, 무음 제거, 자막, 발표 자료, 파워포인트).
+description: Create or edit visual content using only the modules the request needs - Blender models, materials, lighting, renders and 3D animation; 2D motion graphics and HTML/SVG/Canvas scenes rendered to MP4; product demos, ads and music-synced showreels; footage editing, transcription, silence removal, subtitles and audio; animated HTML decks; and editable PowerPoint (.pptx) visual elements, diagrams, SmartArt, shapes, graphics, data charts, animations and slide transitions. Use for a single element or slide fix through multi-scene productions in English or Korean (블렌더, 모션 그래픽, 영상 편집, 발표 자료, 파워포인트, 스마트아트, 다이어그램, 도형, 차트, 애니메이션, 전환 효과).
 license: MIT (see LICENSE; bundled Pretendard, Gowun Batang and Gowun Dodum fonts are OFL-1.1)
 metadata:
   author: Chojema
-  version: "1.3.1"
+  version: "1.4.0"
 ---
 
 # Chojema Visual
@@ -24,7 +24,8 @@ metadata:
 | 제품 광고, 앱 시연 | [제품 영상](references/product-film.md) | 사용하는 엔진의 제작 지침 |
 | 브랜드 쇼릴, 음악 박자에 맞춘 영상 | [모션 쇼릴](references/showreel.md) | 사용하는 엔진의 제작 지침, 오디오 |
 | 자르기, 전사, 무음 제거, 실수 편집, 자막, 촬영본 합성 | [영상 편집](references/editing.md) | 새 장면이 필요할 때만 2D나 3D |
-| 모션 그래픽이 있는 발표 자료, PowerPoint 파일과 애니메이션 | [발표 자료](references/presentations.md) | 별도 3D 자산이 필요할 때만 3D |
+| PowerPoint 시각 요소, 다이어그램, 스마트아트, 도형, 그래픽, 차트, 애니메이션과 전환 효과 | [PowerPoint 시각 요소](references/powerpoint.md) | XML 이동 경로와 회전 예제가 필요할 때만 발표 자료의 해당 절 |
+| HTML 발표 자료, 여러 장의 발표 구성 | [발표 자료](references/presentations.md) | PowerPoint 출력은 PowerPoint 시각 요소, 별도 3D 자산은 3D |
 
 ## 실행 범위
 
