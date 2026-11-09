@@ -17,9 +17,9 @@ The skill's description is written so agents recognize requests in English or Ko
 | Product videos | Demos built from real app screens, feature explainers, product ads | HTML, MP4 |
 | Motion showreels | Brand motif transformations, music-synced cuts | Video |
 | Footage editing | Trims, transcript-based silence removal, captions and B-roll | Edited video, edit decision list, retimed transcript |
-| Presentations | Per-slide motion graphics, keyboard navigation, presenter-controlled transitions | HTML slide deck |
+| Presentations | Per-slide motion graphics, keyboard navigation, presenter-controlled transitions, native PowerPoint animations (motion paths, spins and more) | HTML slide deck, PowerPoint (`.pptx`) |
 
-Existing projects keep their engine and file formats. Other formats such as PowerPoint depend on what the editing tools in your environment support.
+Existing projects keep their engine and file formats. PowerPoint files are built with python-pptx using editable shapes and native PowerPoint animations, and playback is checked when Microsoft PowerPoint is available. Other formats depend on what the editing tools in your environment support.
 
 ## Getting started
 
@@ -131,6 +131,7 @@ Prepare only the tools your task needs. The skill provides production instructio
 | --- | --- |
 | Blender work | [Blender](https://www.blender.org/download/) or an available Blender connector |
 | Playing HTML slide decks | A browser |
+| Building PowerPoint (`.pptx`) files | Python and [python-pptx](https://python-pptx.readthedocs.io/); Microsoft PowerPoint on Windows to check playback |
 | Beat grid calculation | [Node.js](https://nodejs.org/en/download) |
 | Transcript-based edit plans | Node.js and a timed transcript (word or segment level) |
 | Local transcription | FFmpeg 8.0 or later with Whisper support and a [whisper.cpp model](https://huggingface.co/ggerganov/whisper.cpp), or another local transcription tool |
@@ -177,6 +178,13 @@ Keep pauses used for emphasis, and save the edited video and retimed transcript 
 ```text
 $chojema-visual Build a 5-slide HTML deck from outline.md.
 Make it keyboard-navigable and add motion graphics that explain the key relationships.
+```
+
+**PowerPoint animation**
+
+```text
+$chojema-visual Make a PowerPoint slide where a soccer ball rolls from the left edge
+to the right edge. Draw the ball with editable shapes.
 ```
 
 Larger productions can chain footage editing, 3D scenes, 2D graphics and sound in whatever order the work needs. It helps to state the final file format and whether you also want the source project.
@@ -240,7 +248,7 @@ node --test tests/helpers.test.mjs
 
 The tests cover beat grid ranges, merging of cut ranges, transcript retiming, chained edits, Whisper output conversion, renderer argument checks, input validation and protection of existing files. With FFmpeg installed they also check a real edit of a synthetic video, including output streams and duration; without it those tests are skipped. Set `CHOJEMA_PLAYWRIGHT` (the Playwright package path) and, if needed, `CHOJEMA_BROWSER` (a headless Chromium executable) to test real MP4 output from the HTML renderer. Set `CHOJEMA_BLENDER` to the path of `blender.exe` (not `blender-launcher.exe`) to test building and rendering the Blender sample scene.
 
-The following was verified for version 1.2.0 on 2026-11-09.
+The following was verified for version 1.3.0 on 2026-11-09.
 
 | Area | Verified |
 | --- | --- |
@@ -249,9 +257,10 @@ The following was verified for version 1.2.0 on 2026-11-09.
 | Skill structure | Metadata, a single entry point, links to local documents and assets |
 | HTML slide deck | Content appears after button and keyboard navigation, first and last slide boundaries, reduced motion, print, mobile layout |
 | HTML video | Scene boundaries, identical output for the same frame, small MP4 export, local loading and rendering of the three Korean fonts |
+| PowerPoint 16.0 (Microsoft 365) | Motion path and spin animations on a python-pptx shape group are recognized; video export confirms start, middle and end positions and rotation |
 | Blender 5.2.3 LTS | Sample scene creation, EEVEE previews and a full 72-frame render, BT.709 MP4 encoding, material colors and rotation |
 
-Native PowerPoint output and separate HyperFrames projects were not part of this verification; check those results in your own environment.
+Separate HyperFrames projects and PowerPoint playback on macOS were not part of this verification. Only motion path and spin effects were checked in PowerPoint, so check other animation effects in your own environment.
 
 ## Sources and outputs
 

@@ -23,6 +23,81 @@
 
 도구가 없거나 요청한 기능을 지원하지 않으면 해당 한계를 알리고, 제공 가능한 형식을 구분한다. PDF나 장별 이미지는 정지 결과이며 애니메이션 납품물이 아니다. 발표 영상은 별도 시간표와 내레이션에 맞춰 만들고 필요할 때만 영상 제작과 오디오 지침을 읽는다.
 
+### python-pptx로 만들 때
+
+- 움직일 대상은 그림보다 PowerPoint 도형이나 도형 그룹으로 만들어 편집할 수 있게 둔다. 여러 도형을 함께 움직이면 `slide.shapes.add_group_shape()`로 묶고 그룹에 애니메이션을 건다. 글꼴은 받는 컴퓨터에 있는 글꼴을 쓰거나, 없을 수 있음을 알린다.
+- python-pptx에는 애니메이션 API가 없다. 슬라이드 XML에 `p:timing`을 하나 넣는다. 위치는 `p:clrMapOvr`와 `p:transition` 뒤, `p:extLst` 앞이다. 대상은 도형의 `shape_id`(`spid`)로 가리키고, `cTn`의 `id`는 슬라이드 안에서 겹치지 않는 증가하는 정수로 둔다.
+- 이동 경로(`p:animMotion`)는 시작 위치 기준 상대 좌표이며 단위는 슬라이드 너비와 높이의 비율이다. 오른쪽으로 `dx` EMU 이동은 `M 0 0 L {dx / slide_width} 0 E`이다. 회전(`p:animRot`)의 `by`는 각도 × 60000이며 양수가 시계 방향이다.
+- 굴러가는 물체는 회전각을 이동 거리 ÷ (π × 지름) × 360으로 계산하고, 이동과 회전의 지연, 길이, 가감속을 같게 둔다. 다르면 미끄러져 보인다.
+- 첫 효과를 슬라이드 시작과 함께 자동 재생하려면 아래처럼 바깥 `p:par`에 `delay="indefinite"`와 `onBegin` 조건을 두고 `nodeType="afterEffect"`를 쓴다. 클릭으로 시작하려면 `onBegin` 조건을 빼고 `nodeType="clickEffect"`를 쓴다. 같은 시점에 함께 시작하는 효과는 `withEffect`로 둔다.
+
+아래 예시는 원 하나를 슬라이드 왼쪽 끝에서 오른쪽 끝까지 굴린다. 검증한 효과는 사용자 지정 이동 경로(`presetClass="path"`, `presetID="0"`)와 회전(`presetClass="emph"`, `presetID="8"`)이다. 다른 효과를 쓰면 PowerPoint에서 같은 효과를 하나 만들어 저장한 XML과 비교한다.
+
+```python
+import math
+from lxml import etree
+from pptx import Presentation
+from pptx.enum.shapes import MSO_SHAPE
+from pptx.oxml.ns import qn
+from pptx.util import Inches
+
+P = "http://schemas.openxmlformats.org/presentationml/2006/main"
+
+def add_roll(slide, shape, slide_width, dx, diameter, delay_ms=500, dur_ms=3000):
+    """Move `shape` right by dx EMU while spinning it as if rolling; starts automatically."""
+    path_x = dx / slide_width
+    by = round(dx / (math.pi * diameter) * 360 * 60000)
+    spid = shape.shape_id
+    timing = etree.fromstring(f"""
+<p:timing xmlns:p="{P}"><p:tnLst><p:par><p:cTn id="1" dur="indefinite" restart="never" nodeType="tmRoot"><p:childTnLst>
+<p:seq concurrent="1" nextAc="seek"><p:cTn id="2" dur="indefinite" nodeType="mainSeq"><p:childTnLst>
+ <p:par><p:cTn id="3" fill="hold"><p:stCondLst><p:cond delay="indefinite"/><p:cond evt="onBegin" delay="0"><p:tn val="2"/></p:cond></p:stCondLst><p:childTnLst>
+  <p:par><p:cTn id="4" fill="hold"><p:stCondLst><p:cond delay="0"/></p:stCondLst><p:childTnLst>
+   <p:par><p:cTn id="5" presetID="0" presetClass="path" presetSubtype="0" fill="hold" nodeType="afterEffect"><p:stCondLst><p:cond delay="{delay_ms}"/></p:stCondLst><p:childTnLst>
+    <p:animMotion origin="layout" path="M 0 0 L {path_x:.6f} 0 E" pathEditMode="relative" rAng="0" ptsTypes="AA"><p:cBhvr><p:cTn id="6" dur="{dur_ms}" fill="hold"/><p:tgtEl><p:spTgt spid="{spid}"/></p:tgtEl><p:attrNameLst><p:attrName>ppt_x</p:attrName><p:attrName>ppt_y</p:attrName></p:attrNameLst></p:cBhvr><p:rCtr x="{int(path_x * 50000)}" y="0"/></p:animMotion>
+   </p:childTnLst></p:cTn></p:par>
+   <p:par><p:cTn id="7" presetID="8" presetClass="emph" presetSubtype="0" fill="hold" nodeType="withEffect"><p:stCondLst><p:cond delay="{delay_ms}"/></p:stCondLst><p:childTnLst>
+    <p:animRot by="{by}"><p:cBhvr><p:cTn id="8" dur="{dur_ms}" fill="hold"/><p:tgtEl><p:spTgt spid="{spid}"/></p:tgtEl><p:attrNameLst><p:attrName>r</p:attrName></p:attrNameLst></p:cBhvr></p:animRot>
+   </p:childTnLst></p:cTn></p:par>
+  </p:childTnLst></p:cTn></p:par>
+ </p:childTnLst></p:cTn></p:par>
+</p:childTnLst></p:cTn>
+<p:prevCondLst><p:cond evt="onPrev" delay="0"><p:tgtEl><p:sldTgt/></p:tgtEl></p:cond></p:prevCondLst>
+<p:nextCondLst><p:cond evt="onNext" delay="0"><p:tgtEl><p:sldTgt/></p:tgtEl></p:cond></p:nextCondLst></p:seq>
+</p:childTnLst></p:cTn></p:par></p:tnLst></p:timing>""")
+    ext = slide._element.find(qn("p:extLst"))
+    ext.addprevious(timing) if ext is not None else slide._element.append(timing)
+
+prs = Presentation()
+prs.slide_width, prs.slide_height = Inches(13.333), Inches(7.5)
+slide = prs.slides.add_slide(prs.slide_layouts[6])
+d = Inches(1.4)
+ball = slide.shapes.add_shape(MSO_SHAPE.OVAL, 0, Inches(4.5), d, d)
+add_roll(slide, ball, prs.slide_width, prs.slide_width - d, d)
+prs.save("roll.pptx")
+```
+
+### PowerPoint로 재생 확인
+
+PowerPoint가 있는 Windows에서는 COM으로 파일을 읽기 전용으로 열어 애니메이션 목록을 확인하고, 영상으로 내보내 실제 재생을 본다. 효과 종류 번호는 0이 사용자 지정 경로, 61이 회전이고, 시작 방식은 1이 클릭, 2가 이전 효과와 함께, 3이 이전 효과 다음이다.
+
+```powershell
+$app = New-Object -ComObject PowerPoint.Application
+try {
+  $pres = $app.Presentations.Open((Resolve-Path "roll.pptx").Path, $true, $false, $false)
+  $seq = $pres.Slides(1).TimeLine.MainSequence
+  for ($i = 1; $i -le $seq.Count; $i++) { $e = $seq.Item($i); "$($e.Shape.Name) type=$($e.EffectType) trigger=$($e.Timing.TriggerType) dur=$($e.Timing.Duration)" }
+  $pres.CreateVideo("$PWD\roll-preview.mp4", $true, 5, 720, 30, 85)
+  while ($pres.CreateVideoStatus -in 1, 2) { Start-Sleep -Milliseconds 500 }
+  "video status $($pres.CreateVideoStatus)"  # 3 = done
+  $pres.Close()
+} finally { $app.Quit() }
+```
+
+내보낸 영상에서 시작, 중간, 끝 프레임을 뽑아 위치와 회전을 확인한다. 기존 영상 경로가 있으면 새 이름을 쓴다. PowerPoint가 없으면 XML 구조만 확인한 것이므로 재생은 미검증으로 알린다. LibreOffice Impress는 일부 효과를 다르게 재생하므로 PowerPoint 재생의 근거로 쓰지 않는다.
+
+### 공통 확인
+
 전체 화면, 키보드 탐색, 앞뒤 이동, 각 장의 안정된 상태와 움직이는 상태를 확인한다. 마지막 장에서 멈추는지, 모션 감소 환경과 인쇄에서도 내용이 보이는지 확인한다.
 
-공식 자료: [모션 감소 설정](https://developer.mozilla.org/en-US/docs/Web/CSS/@media/prefers-reduced-motion), [인쇄 스타일](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_media_queries/Printing).
+공식 자료: [python-pptx](https://python-pptx.readthedocs.io/), [PowerPoint 애니메이션 개체 모델](https://learn.microsoft.com/en-us/office/vba/api/powerpoint.timeline), [모션 감소 설정](https://developer.mozilla.org/en-US/docs/Web/CSS/@media/prefers-reduced-motion), [인쇄 스타일](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_media_queries/Printing).

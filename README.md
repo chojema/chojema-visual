@@ -15,9 +15,9 @@
 | 제품 영상 | 실제 앱 화면을 이용한 시연, 기능 설명, 제품 광고 | HTML, MP4 |
 | 모션 쇼릴 | 브랜드 모티프 변형, 음악 박자에 맞춘 구성 | 영상 |
 | 촬영본 편집 | 구간 삭제, 전사 기반 무음 제거, 자막과 보조 장면 구성 | 편집 영상, 편집 결정 목록, 재배치된 전사문 |
-| 발표 자료 | 장별 모션 그래픽, 키보드 탐색, 발표자가 제어하는 화면 전환 | HTML 발표 자료 |
+| 발표 자료 | 장별 모션 그래픽, 키보드 탐색, 발표자가 제어하는 화면 전환, PowerPoint 기본 애니메이션(이동 경로, 회전 등) | HTML 발표 자료, PowerPoint(`.pptx`) |
 
-기존 프로젝트는 사용하는 엔진과 파일 형식을 유지합니다. PowerPoint 등 별도 형식의 제작과 편집은 실행 환경에 있는 편집 도구의 지원 범위를 따릅니다.
+기존 프로젝트는 사용하는 엔진과 파일 형식을 유지합니다. PowerPoint 파일은 python-pptx로 편집 가능한 도형과 PowerPoint 기본 애니메이션을 넣어 만들고, Microsoft PowerPoint가 있으면 실제 재생을 확인합니다. 그 밖의 형식은 실행 환경에 있는 편집 도구의 지원 범위를 따릅니다.
 
 ## 시작하기
 
@@ -129,6 +129,7 @@ Antigravity와 OpenCode를 포함해 여러 에이전트에 공통 배포하려�
 | --- | --- |
 | Blender 작업 | [Blender](https://www.blender.org/download/) 또는 사용 가능한 Blender 연결 도구 |
 | HTML 발표 자료 재생 | 브라우저 |
+| PowerPoint(`.pptx`) 제작 | Python과 [python-pptx](https://python-pptx.readthedocs.io/), 재생 확인은 Windows의 Microsoft PowerPoint |
 | 박자표 계산 | [Node.js](https://nodejs.org/en/download) |
 | 전사 기반 편집 계획 | Node.js, 시각이 있는 전사문(단어 또는 구간 단위) |
 | 로컬 전사 | Whisper 지원 FFmpeg 8.0 이상과 [whisper.cpp 모델](https://huggingface.co/ggerganov/whisper.cpp), 또는 다른 로컬 전사 도구 |
@@ -175,6 +176,13 @@ $chojema-visual recording.mp4와 transcript.json으로 긴 무음을 줄여 줘.
 ```text
 $chojema-visual outline.md를 바탕으로 5장짜리 HTML 발표 자료를 만들어 줘.
 키보드로 넘길 수 있게 하고, 핵심 관계를 설명하는 모션 그래픽을 넣어 줘.
+```
+
+**PowerPoint 애니메이션**
+
+```text
+$chojema-visual 왼쪽 끝의 축구공이 오른쪽 끝까지 굴러가는 슬라이드를
+PowerPoint 파일로 만들어 줘. 공은 편집할 수 있는 도형으로 그려 줘.
 ```
 
 복합 작업에서는 촬영본 편집, 3D 장면, 2D 그래픽과 음향을 필요한 순서로 연결할 수 있습니다. 최종 파일 형식과 함께 원본 프로젝트가 필요한지도 지정하면 좋습니다.
@@ -238,7 +246,7 @@ node --test tests/helpers.test.mjs
 
 자동 검사는 박자표 범위, 삭제 구간 병합, 전사문 시간 재배치, 연속 편집, Whisper 출력 변환, 렌더러 인자 검증, 입력 검증과 기존 파일 보호를 확인합니다. FFmpeg가 있으면 합성 영상의 실제 편집과 출력 스트림, 길이도 검사하며, 없으면 해당 실행 검사를 건너뜁니다. `CHOJEMA_PLAYWRIGHT`(Playwright 패키지 경로)와 필요하면 `CHOJEMA_BROWSER`(헤드리스 Chromium 실행 파일)를 지정하면 HTML 렌더러의 실제 MP4 출력도 검사합니다. `CHOJEMA_BLENDER`에 `blender.exe` 경로(`blender-launcher.exe` 아님)를 지정하면 Blender 견본 장면의 생성과 렌더도 검사합니다.
 
-버전 1.2.0, 2026. 11. 09. 기준으로 다음 범위를 확인했습니다.
+버전 1.3.0, 2026. 11. 09. 기준으로 다음 범위를 확인했습니다.
 
 | 구분 | 확인한 범위 |
 | --- | --- |
@@ -247,9 +255,10 @@ node --test tests/helpers.test.mjs
 | 스킬 구성 | 메타데이터, 단일 진입점, 로컬 문서와 자산 참조 연결 |
 | HTML 발표 자료 | 버튼과 키보드 탐색 후 등장 내용 표시, 처음과 끝 경계, 모션 감소, 인쇄, 모바일 배치 |
 | HTML 영상 | 장면 경계, 같은 프레임의 재현, 소규모 MP4 출력, 한국어 글꼴 3종 로컬 로드와 렌더 |
+| PowerPoint 16.0(Microsoft 365) | python-pptx로 만든 도형 그룹의 이동 경로와 회전 애니메이션 인식, 영상 내보내기로 시작·중간·끝 위치와 회전 확인 |
 | Blender 5.2.3 LTS | 견본 장면 생성, EEVEE 미리보기와 72프레임 전체 렌더, BT.709 MP4 인코딩, 재질 색과 회전 확인 |
 
-네이티브 PowerPoint 출력, 별도 HyperFrames 프로젝트 제작은 이 검증에 포함하지 않았습니다. 해당 결과물은 실제 작업 환경에서 확인해야 합니다.
+별도 HyperFrames 프로젝트 제작과 macOS의 PowerPoint 재생은 이 검증에 포함하지 않았습니다. PowerPoint는 이동 경로와 회전만 확인했으므로 다른 애니메이션 효과는 실제 작업 환경에서 확인해야 합니다.
 
 ## 자료와 결과물 관리
 

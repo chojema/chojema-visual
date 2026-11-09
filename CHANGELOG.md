@@ -1,5 +1,10 @@
 # 변경 기록
 
+## 1.3.0 (2026-11-09)
+
+- `references/presentations.md`에 PowerPoint 기본 애니메이션 제작 방법을 넣었다. python-pptx로 편집 가능한 도형을 만들고 `p:timing` XML로 이동 경로와 회전을 넣는 실행 예시, 단위 규칙(슬라이드 비율 좌표, 각도 × 60000, 굴림 회전각), 자동·클릭 시작 구조, PowerPoint COM으로 애니메이션 목록 확인과 영상 내보내기를 포함한다.
+- README의 할 수 있는 작업, 제작 환경, 요청 예시, 검증 범위에 PowerPoint를 반영했다.
+
 ## 1.2.0 (2026-11-09)
 
 - 한국어 글꼴 Gowun Batang(400, 700)과 Gowun Dodum(400)을 OFL 1.1 고지와 함께 추가했다. Google Fonts 원본 TTF를 WOFF2로만 변환해 세 파일이 약 1.4MB다.
