@@ -1,5 +1,9 @@
 # 변경 기록
 
+## 미배포
+
+- 영문 README(`README.en.md`)를 추가하고 두 README에 언어 전환 링크를 넣었다.
+
 ## 1.1.2 (2026-11-09)
 
 - `LICENSE`를 표준 MIT 문구만 남겨 GitHub이 MIT로 인식하게 했다. 글꼴의 OFL 1.1 안내는 README, `references/sources.md`, `assets/fonts/Pretendard-OFL.txt`에 있다.

@@ -1,5 +1,7 @@
 # Chojema Visual
 
+**한국어** | [English](README.en.md)
+
 작은 모델 수정부터 3D 애니메이션, 모션 그래픽, 영상 편집과 움직이는 발표 자료까지 다루는 통합 제작 스킬입니다.
 
 하나의 스킬을 설치하고 작업을 요청하면, 필요한 기능의 지침과 도구를 선택해 사용합니다. 단독 작업은 해당 요소를 만들고 확인하는 데 집중하고, 복합 작업은 여러 제작 기능을 같은 프로젝트 안에서 연결합니다.
@@ -199,7 +201,7 @@ $chojema-visual outline.md를 바탕으로 5장짜리 HTML 발표 자료를 만�
 | [tests/helpers.test.mjs](tests/helpers.test.mjs) | 편집, 전사 변환, 박자표, HTML 렌더러, Blender 견본의 자동 검사 |
 | [LICENSE](LICENSE) | MIT 라이선스(글꼴은 `assets/fonts`의 OFL 고지를 따름) |
 | [CHANGELOG.md](CHANGELOG.md) | 버전별 변경 기록 |
-| [README.md](README.md) | 설치와 사용 안내 |
+| [README.md](README.md) / [README.en.md](README.en.md) | 한국어 / 영어 설치와 사용 안내 |
 
 ### 보조 도구 직접 실행
 
