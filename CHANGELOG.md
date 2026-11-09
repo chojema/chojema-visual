@@ -1,7 +1,10 @@
 # 변경 기록
 
-## 미배포
+## 1.2.0 (2026-11-09)
 
+- 한국어 글꼴 Gowun Batang(400, 700)과 Gowun Dodum(400)을 OFL 1.1 고지와 함께 추가했다. Google Fonts 원본 TTF를 WOFF2로만 변환해 세 파일이 약 1.4MB다.
+- 글꼴 용도 기준(기본 Pretendard, 제목·인용 Gowun Batang, 본문·자막 Gowun Dodum)과 선언 예시를 `SKILL.md`와 `references/sources.md`에 넣었다.
+- 모든 글꼴에 OFL 고지가 있는지 확인하는 테스트를 추가했다.
 - 영문 README(`README.en.md`)를 추가하고 두 README에 언어 전환 링크를 넣었다.
 
 ## 1.1.2 (2026-11-09)

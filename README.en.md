@@ -199,9 +199,9 @@ This design limits what is read to the type and size of the task; it is not a me
 | [agents/openai.yaml](agents/openai.yaml) | Display name and default prompt |
 | `references/` | Guides for 3D, 2D motion, product videos, showreels, editing, presentations, rendering and audio (in Korean) |
 | `scripts/` | HTML video renderer, transcript-based editing tools, beat grid calculator |
-| `assets/` | HTML video and slide deck samples, Blender scene sample, templates, font and synthesized audio |
+| `assets/` | HTML video and slide deck samples, Blender scene sample, templates, three Korean fonts and synthesized audio |
 | [tests/helpers.test.mjs](tests/helpers.test.mjs) | Automated tests for editing, transcript conversion, beat grid, HTML renderer and Blender sample |
-| [LICENSE](LICENSE) | MIT License (the font follows the OFL notice in `assets/fonts`) |
+| [LICENSE](LICENSE) | MIT License (the three fonts follow the OFL notices in `assets/fonts`) |
 | [CHANGELOG.md](CHANGELOG.md) | Changes per version (in Korean) |
 | [README.md](README.md) / [README.en.md](README.en.md) | Installation and usage guide in Korean / English |
 
@@ -240,15 +240,15 @@ node --test tests/helpers.test.mjs
 
 The tests cover beat grid ranges, merging of cut ranges, transcript retiming, chained edits, Whisper output conversion, renderer argument checks, input validation and protection of existing files. With FFmpeg installed they also check a real edit of a synthetic video, including output streams and duration; without it those tests are skipped. Set `CHOJEMA_PLAYWRIGHT` (the Playwright package path) and, if needed, `CHOJEMA_BROWSER` (a headless Chromium executable) to test real MP4 output from the HTML renderer. Set `CHOJEMA_BLENDER` to the path of `blender.exe` (not `blender-launcher.exe`) to test building and rendering the Blender sample scene.
 
-The following was verified for version 1.1.2 on 2026-11-09.
+The following was verified for version 1.2.0 on 2026-11-09.
 
 | Area | Verified |
 | --- | --- |
-| Automated tests | All 16 tests pass, including real FFmpeg edits, HTML renderer MP4 output and the Blender sample render |
+| Automated tests | All 17 tests pass, including real FFmpeg edits, HTML renderer MP4 output and the Blender sample render |
 | Local transcription | Synthesized speech → FFmpeg 8.0 `whisper` filter (large-v3-turbo) → transcript conversion → silence-removed MP4 |
 | Skill structure | Metadata, a single entry point, links to local documents and assets |
 | HTML slide deck | Content appears after button and keyboard navigation, first and last slide boundaries, reduced motion, print, mobile layout |
-| HTML video | Scene boundaries, identical output for the same frame, small MP4 export |
+| HTML video | Scene boundaries, identical output for the same frame, small MP4 export, local loading and rendering of the three Korean fonts |
 | Blender 5.2.3 LTS | Sample scene creation, EEVEE previews and a full 72-frame render, BT.709 MP4 encoding, material colors and rotation |
 
 Native PowerPoint output and separate HyperFrames projects were not part of this verification; check those results in your own environment.
@@ -259,8 +259,8 @@ Sources are preserved and results are saved to separate paths by default. The in
 
 Real product logos, screens and features are used only from the materials you provide. Prepare music, voice, photos and models that you are allowed to use. An HTML slide deck, an editable PowerPoint file and a recorded presentation video are different deliverables, so specify the format you need.
 
-The bundled Pretendard font is distributed with its [SIL Open Font License notice](assets/fonts/Pretendard-OFL.txt). Keep the notice when you include the font in your outputs. Details on runtime requirements and bundled assets are in [runtime and sources](references/sources.md) (in Korean).
+Three Korean typefaces are bundled: Pretendard (default, variable weight), Gowun Batang (headlines and quotes, 400 and 700) and Gowun Dodum (body text and captions, 400). All three are under the SIL Open Font License 1.1 and ship with their notices ([Pretendard](assets/fonts/Pretendard-OFL.txt), [Gowun Batang](assets/fonts/GowunBatang-OFL.txt), [Gowun Dodum](assets/fonts/GowunDodum-OFL.txt)). Keep the notice when you include a font in your outputs. Details on runtime requirements and bundled assets are in [runtime and sources](references/sources.md) (in Korean).
 
 ## License
 
-The documents, scripts and samples are provided under the [MIT License](LICENSE). The bundled Pretendard font follows the [SIL Open Font License 1.1](assets/fonts/Pretendard-OFL.txt) and is not covered by the MIT License. Changes per version are in the [changelog](CHANGELOG.md).
+The documents, scripts and samples are provided under the [MIT License](LICENSE). The bundled Pretendard, Gowun Batang and Gowun Dodum fonts follow their own SIL Open Font License 1.1 notices (`assets/fonts/*-OFL.txt`) and are not covered by the MIT License. Changes per version are in the [changelog](CHANGELOG.md).

@@ -197,9 +197,9 @@ $chojema-visual outline.md를 바탕으로 5장짜리 HTML 발표 자료를 만�
 | [agents/openai.yaml](agents/openai.yaml) | 표시 이름과 기본 호출 문구 |
 | `references/` | 3D, 2D 모션, 제품 영상, 쇼릴, 편집, 발표 자료, 렌더링, 오디오 지침 |
 | `scripts/` | HTML 영상 렌더러, 전사 기반 편집, 박자표 계산 도구 |
-| `assets/` | HTML 영상과 발표 자료 견본, Blender 장면 견본, 서식, 글꼴과 합성 오디오 |
+| `assets/` | HTML 영상과 발표 자료 견본, Blender 장면 견본, 서식, 한국어 글꼴 3종과 합성 오디오 |
 | [tests/helpers.test.mjs](tests/helpers.test.mjs) | 편집, 전사 변환, 박자표, HTML 렌더러, Blender 견본의 자동 검사 |
-| [LICENSE](LICENSE) | MIT 라이선스(글꼴은 `assets/fonts`의 OFL 고지를 따름) |
+| [LICENSE](LICENSE) | MIT 라이선스(글꼴 3종은 `assets/fonts`의 OFL 고지를 따름) |
 | [CHANGELOG.md](CHANGELOG.md) | 버전별 변경 기록 |
 | [README.md](README.md) / [README.en.md](README.en.md) | 한국어 / 영어 설치와 사용 안내 |
 
@@ -238,15 +238,15 @@ node --test tests/helpers.test.mjs
 
 자동 검사는 박자표 범위, 삭제 구간 병합, 전사문 시간 재배치, 연속 편집, Whisper 출력 변환, 렌더러 인자 검증, 입력 검증과 기존 파일 보호를 확인합니다. FFmpeg가 있으면 합성 영상의 실제 편집과 출력 스트림, 길이도 검사하며, 없으면 해당 실행 검사를 건너뜁니다. `CHOJEMA_PLAYWRIGHT`(Playwright 패키지 경로)와 필요하면 `CHOJEMA_BROWSER`(헤드리스 Chromium 실행 파일)를 지정하면 HTML 렌더러의 실제 MP4 출력도 검사합니다. `CHOJEMA_BLENDER`에 `blender.exe` 경로(`blender-launcher.exe` 아님)를 지정하면 Blender 견본 장면의 생성과 렌더도 검사합니다.
 
-버전 1.1.2, 2026. 11. 09. 기준으로 다음 범위를 확인했습니다.
+버전 1.2.0, 2026. 11. 09. 기준으로 다음 범위를 확인했습니다.
 
 | 구분 | 확인한 범위 |
 | --- | --- |
-| 자동 검사 | 16개 검사 통과. FFmpeg 실제 편집, HTML 렌더러 MP4 출력, Blender 견본 렌더 포함 |
+| 자동 검사 | 17개 검사 통과. FFmpeg 실제 편집, HTML 렌더러 MP4 출력, Blender 견본 렌더 포함 |
 | 로컬 전사 | 합성 음성 → FFmpeg 8.0 `whisper` 필터(large-v3-turbo) → 전사문 변환 → 무음 제거 MP4 출력 |
 | 스킬 구성 | 메타데이터, 단일 진입점, 로컬 문서와 자산 참조 연결 |
 | HTML 발표 자료 | 버튼과 키보드 탐색 후 등장 내용 표시, 처음과 끝 경계, 모션 감소, 인쇄, 모바일 배치 |
-| HTML 영상 | 장면 경계, 같은 프레임의 재현, 소규모 MP4 출력 |
+| HTML 영상 | 장면 경계, 같은 프레임의 재현, 소규모 MP4 출력, 한국어 글꼴 3종 로컬 로드와 렌더 |
 | Blender 5.2.3 LTS | 견본 장면 생성, EEVEE 미리보기와 72프레임 전체 렌더, BT.709 MP4 인코딩, 재질 색과 회전 확인 |
 
 네이티브 PowerPoint 출력, 별도 HyperFrames 프로젝트 제작은 이 검증에 포함하지 않았습니다. 해당 결과물은 실제 작업 환경에서 확인해야 합니다.
@@ -257,8 +257,8 @@ node --test tests/helpers.test.mjs
 
 실제 제품의 로고, 화면과 기능은 제공된 자료를 기준으로 사용합니다. 음악, 음성, 사진과 모델은 사용할 수 있는 자료를 준비합니다. HTML 발표 자료, 편집 가능한 PowerPoint와 발표 녹화 영상은 서로 다른 결과물이므로 필요한 형식을 지정합니다.
 
-포함된 Pretendard 글꼴은 [SIL Open Font License 고지](assets/fonts/Pretendard-OFL.txt)와 함께 제공합니다. 글꼴을 결과물에 포함할 때도 고지를 함께 보존합니다. 실행 환경과 포함 자산의 자세한 내용은 [실행 환경과 자료 출처](references/sources.md)에 있습니다.
+한국어 글꼴로 Pretendard(기본, 가변 굵기), Gowun Batang(제목·인용, 400·700), Gowun Dodum(본문·자막, 400)을 포함합니다. 세 글꼴 모두 SIL Open Font License 1.1이며 고지 파일([Pretendard](assets/fonts/Pretendard-OFL.txt), [Gowun Batang](assets/fonts/GowunBatang-OFL.txt), [Gowun Dodum](assets/fonts/GowunDodum-OFL.txt))과 함께 제공합니다. 글꼴을 결과물에 포함할 때도 고지를 함께 보존합니다. 실행 환경과 포함 자산의 자세한 내용은 [실행 환경과 자료 출처](references/sources.md)에 있습니다.
 
 ## 라이선스
 
-문서, 스크립트와 견본은 [MIT 라이선스](LICENSE)로 제공합니다. 포함된 Pretendard 글꼴은 [SIL Open Font License 1.1](assets/fonts/Pretendard-OFL.txt)을 따르며 MIT 라이선스의 적용 대상이 아닙니다. 버전별 변경은 [변경 기록](CHANGELOG.md)에 있습니다.
+문서, 스크립트와 견본은 [MIT 라이선스](LICENSE)로 제공합니다. 포함된 Pretendard, Gowun Batang, Gowun Dodum 글꼴은 각각의 SIL Open Font License 1.1 고지(`assets/fonts/*-OFL.txt`)를 따르며 MIT 라이선스의 적용 대상이 아닙니다. 버전별 변경은 [변경 기록](CHANGELOG.md)에 있습니다.

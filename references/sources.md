@@ -21,7 +21,29 @@
 
 `assets`에는 HTML 영상 견본(`demo.html`)과 로컬에서 합성한 견본 오디오, HTML 발표 자료 견본, Blender 새 장면 견본, 스토리보드와 오디오 큐 서식, 글꼴이 있다. 모두 수정해 쓰는 출발점이다.
 
-Pretendard 글꼴은 원본 파일과 [OFL 고지](../assets/fonts/Pretendard-OFL.txt)를 함께 보존한다. 견본의 제품과 문구는 가상의 예시다. 스킬의 문서, 스크립트와 견본은 [MIT 라이선스](../LICENSE)를 따르며 글꼴은 OFL 1.1을 따른다. 사용자가 제공한 자산과 외부 도구에는 해당 사용 조건이 적용된다.
+견본의 제품과 문구는 가상의 예시다. 스킬의 문서, 스크립트와 견본은 [MIT 라이선스](../LICENSE)를 따르며 글꼴은 각각의 OFL 1.1 고지를 따른다.
+
+## 한국어 글꼴
+
+`assets/fonts`의 세 글꼴은 모두 SIL OFL 1.1이다. 결과물 프로젝트에 복사할 때는 쓰는 글꼴의 OFL 고지 파일을 같은 폴더에 함께 둔다. 글꼴만 따로 판매하지 않는다.
+
+| 글꼴 | 파일 | 굵기 | 어울리는 곳 | 고지 |
+| --- | --- | --- | --- | --- |
+| Pretendard | `PretendardVariable.woff2` | 45~920 가변 | 기본값. UI, 표와 숫자, 키네틱 타이포처럼 굵기 변화가 필요한 곳 | [Pretendard-OFL.txt](../assets/fonts/Pretendard-OFL.txt) |
+| Gowun Batang | `GowunBatang-Regular.woff2`, `GowunBatang-Bold.woff2` | 400, 700 | 큰 제목, 인용문, 감성 문구, 표지와 장 제목처럼 천천히 읽히는 글 | [GowunBatang-OFL.txt](../assets/fonts/GowunBatang-OFL.txt) |
+| Gowun Dodum | `GowunDodum-Regular.woff2` | 400 | 따뜻한 본문, 자막, 짧은 설명 문구 | [GowunDodum-OFL.txt](../assets/fonts/GowunDodum-OFL.txt) |
+
+Gowun 글꼴은 굵기가 적으므로 지원하지 않는 굵기를 지정하지 않는다. 브라우저가 가짜 굵게나 기울임을 만들지 않도록 `font-synthesis: none`을 둔다. 한 화면에는 제목용과 본문용 두 글꼴까지만 섞는다. 사용자가 브랜드 글꼴을 지정했으면 그 글꼴을 우선한다.
+
+```css
+@font-face { font-family: "Gowun Batang"; src: url("fonts/GowunBatang-Regular.woff2") format("woff2"); font-weight: 400; font-display: block; }
+@font-face { font-family: "Gowun Batang"; src: url("fonts/GowunBatang-Bold.woff2") format("woff2"); font-weight: 700; font-display: block; }
+@font-face { font-family: "Gowun Dodum"; src: url("fonts/GowunDodum-Regular.woff2") format("woff2"); font-weight: 400; font-display: block; }
+```
+
+프레임 렌더에서는 `document.fonts.load('700 64px "Gowun Batang"')`처럼 실제로 쓰는 굵기를 읽은 뒤 그린다. Blender 텍스트 객체는 WOFF2를 읽지 못하므로, 사용자가 TTF를 제공하지 않았으면 아래 출처에서 원본 TTF를 받아 결과물 프로젝트에 고지와 함께 둔다.
+
+출처: Google Fonts 저장소 `google/fonts`의 `ofl/gowunbatang`, `ofl/gowundodum`(커밋 c1eda9233c33). 디자이너는 류양희이며 원본 프로젝트는 [Gowun Batang](https://github.com/yangheeryu/Gowun-Batang), [Gowun Dodum](https://github.com/yangheeryu/Gowun-Dodum)이다. TTF를 fontTools로 WOFF2로만 변환했고 글리프와 문자 대응은 원본과 같다. 사용자가 제공한 자산과 외부 도구에는 해당 사용 조건이 적용된다.
 
 공식 도구 문서는 기능별 참조 문서에 연결한다. 구체적인 옵션과 버전 차이는 설치 환경의 도움말과 공식 문서로 확인한다.
 

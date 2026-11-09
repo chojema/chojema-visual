@@ -1,10 +1,10 @@
 ---
 name: chojema-visual
 description: Creates or edits visual content using only the production modules a request needs - Blender 3D modeling, materials, lighting, still renders and 3D animation; 2D motion graphics, kinetic typography and HTML/SVG/Canvas scenes rendered to MP4; product ads and app demo videos; music-synced brand showreels; footage editing (trims, silence and mistake removal from transcripts, Whisper transcription, subtitles, compositing, audio mix and loudness); and animated HTML slide decks. Use for anything from a single model, shot or slide fix to multi-scene productions, whether the request is in English or Korean (블렌더, 3D 애니메이션, 모션 그래픽, 제품 영상, 앱 시연, 쇼릴, 영상 편집, 무음 제거, 자막, 발표 자료).
-license: MIT (see LICENSE; bundled Pretendard font is OFL-1.1)
+license: MIT (see LICENSE; bundled Pretendard, Gowun Batang and Gowun Dodum fonts are OFL-1.1)
 metadata:
   author: Chojema
-  version: "1.1.2"
+  version: "1.2.0"
 ---
 
 # Chojema Visual
@@ -38,6 +38,7 @@ metadata:
 - 원본을 보존하고 별도 결과 경로에 저장한다. 사용자 프로젝트를 스킬 폴더에 만들지 않는다. 자산은 기존 프로젝트나 지정된 자료에서 필요한 것만 확인한다. 실제 UI, 로고, 제품 형상과 수치를 근거 없이 만들어 사실처럼 제시하지 않는다.
 - 결과 형식은 요청을 따른다. `.blend`, 정지 이미지, HTML 발표 자료처럼 영상이 아닌 결과도 완성본이다. HTML 발표 자료와 편집 가능한 PowerPoint, 녹화된 발표 영상은 서로 다른 납품물이다.
 - 필요한 실행 파일과 의존성만 확인한다. Blender 단독 작업에 Node.js나 HyperFrames를 설치하지 않는다. 다른 전문 스킬의 추가 설치를 요구하지 않는다. 외부 서비스 사용, 업로드와 유료 생성은 기존 사용자 승인 범위를 따른다.
+- 한국어 글꼴은 기본으로 Pretendard를 쓰고, 제목·인용·감성 문구에는 Gowun Batang, 따뜻한 본문과 자막에는 Gowun Dodum을 고를 수 있다. 굵기, 선언 예시와 라이선스 고지 규칙은 [실행 환경과 자료 출처](references/sources.md)의 한국어 글꼴 절을 따른다.
 - 결과를 실제로 열거나 렌더해 작업에 맞게 확인한다. 정지 작업은 해당 화면, 애니메이션은 동작과 전환, 편집본은 경계와 싱크, 발표 자료는 탐색과 가독성을 확인한다. 수행하지 못한 검증은 구분해 알린다.
 
 ## 조건부 공통 자료

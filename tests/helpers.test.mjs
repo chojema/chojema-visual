@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { spawnSync } from 'node:child_process';
-import { existsSync, mkdtempSync, readFileSync, realpathSync, rmSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdtempSync, readdirSync, readFileSync, realpathSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -254,4 +254,16 @@ test('editors use the FFmpeg and FFprobe paths given on the command line', (t) =
   const noDuration = join(dir, 'nodur.json');
   json(noDuration, { words: transcript.words });
   assert.notEqual(run('cut-silences.mjs', [noDuration, '--video', join(dir, 'source.mp4'), '--out-dir', join(dir, 'b'), '--ffprobe', missing]).status, 0, 'a missing --ffprobe must fail');
+});
+
+test('every bundled font ships with its OFL notice', () => {
+  const fonts = join(root, 'assets/fonts');
+  const files = readdirSync(fonts);
+  const families = new Set(files.filter((f) => f.endsWith('.woff2')).map((f) => f.replace(/(-(Regular|Bold))?\.woff2$|Variable\.woff2$/, '')));
+  assert.ok(families.size >= 3);
+  for (const family of families) {
+    const notice = join(fonts, family + '-OFL.txt');
+    assert.ok(existsSync(notice), 'missing ' + notice);
+    assert.match(readFileSync(notice, 'utf8'), /SIL OPEN FONT LICENSE Version 1\.1/);
+  }
 });
