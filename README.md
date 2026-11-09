@@ -197,7 +197,7 @@ $chojema-visual outline.md를 바탕으로 5장짜리 HTML 발표 자료를 만�
 | `scripts/` | HTML 영상 렌더러, 전사 기반 편집, 박자표 계산 도구 |
 | `assets/` | HTML 영상과 발표 자료 견본, Blender 장면 견본, 서식, 글꼴과 합성 오디오 |
 | [tests/helpers.test.mjs](tests/helpers.test.mjs) | 편집, 전사 변환, 박자표, HTML 렌더러, Blender 견본의 자동 검사 |
-| [LICENSE](LICENSE) | MIT 라이선스와 글꼴 라이선스 안내 |
+| [LICENSE](LICENSE) | MIT 라이선스(글꼴은 `assets/fonts`의 OFL 고지를 따름) |
 | [CHANGELOG.md](CHANGELOG.md) | 버전별 변경 기록 |
 | [README.md](README.md) | 설치와 사용 안내 |
 
@@ -236,7 +236,7 @@ node --test tests/helpers.test.mjs
 
 자동 검사는 박자표 범위, 삭제 구간 병합, 전사문 시간 재배치, 연속 편집, Whisper 출력 변환, 렌더러 인자 검증, 입력 검증과 기존 파일 보호를 확인합니다. FFmpeg가 있으면 합성 영상의 실제 편집과 출력 스트림, 길이도 검사하며, 없으면 해당 실행 검사를 건너뜁니다. `CHOJEMA_PLAYWRIGHT`(Playwright 패키지 경로)와 필요하면 `CHOJEMA_BROWSER`(헤드리스 Chromium 실행 파일)를 지정하면 HTML 렌더러의 실제 MP4 출력도 검사합니다. `CHOJEMA_BLENDER`에 `blender.exe` 경로(`blender-launcher.exe` 아님)를 지정하면 Blender 견본 장면의 생성과 렌더도 검사합니다.
 
-버전 1.1.1, 2026. 11. 09. 기준으로 다음 범위를 확인했습니다.
+버전 1.1.2, 2026. 11. 09. 기준으로 다음 범위를 확인했습니다.
 
 | 구분 | 확인한 범위 |
 | --- | --- |

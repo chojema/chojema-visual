@@ -4,7 +4,7 @@ description: Creates or edits visual content using only the production modules a
 license: MIT (see LICENSE; bundled Pretendard font is OFL-1.1)
 metadata:
   author: Chojema
-  version: "1.1.1"
+  version: "1.1.2"
 ---
 
 # Chojema Visual

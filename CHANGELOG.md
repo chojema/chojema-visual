@@ -1,5 +1,9 @@
 # 변경 기록
 
+## 1.1.2 (2026-11-09)
+
+- `LICENSE`를 표준 MIT 문구만 남겨 GitHub이 MIT로 인식하게 했다. 글꼴의 OFL 1.1 안내는 README, `references/sources.md`, `assets/fonts/Pretendard-OFL.txt`에 있다.
+
 ## 1.1.1 (2026-11-09)
 
 - HTML 렌더러와 Blender MP4 명령의 색 태그가 FFmpeg 7 이상에서 `unknown`이나 sRGB로 남던 문제를 `setparams`로 고쳤다. 픽셀은 그대로이고 태그만 BT.709로 확정된다.
