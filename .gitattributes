@@ -1,0 +1,11 @@
+# Keep text files LF on every platform so diffs show only real changes
+* text=auto eol=lf
+
+# Binary assets
+*.woff2 binary
+*.mp3 binary
+*.wav binary
+*.mp4 binary
+*.png binary
+*.jpg binary
+*.blend binary

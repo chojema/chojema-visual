@@ -1,0 +1,13 @@
+# Render and test byproducts (the renderer runtime is installed per project)
+node_modules/
+render-runtime/
+.chojema-render-*/
+dist/
+*.log
+
+# OS and editor files
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Chojema Visual"
+  short_description: "3D, 모션 그래픽, 영상과 발표 자료를 작업 규모에 맞춰 제작합니다"
+  default_prompt: "$chojema-visual 스킬로 요청한 시각 콘텐츠를 필요한 기능만 사용해 제작하고 결과를 확인해 주세요."

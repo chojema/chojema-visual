@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="ko">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FORMA | Chojema Motion 예제</title>
+<style>
+  @font-face { font-family: "Pretendard Variable"; src: url("fonts/PretendardVariable.woff2") format("woff2-variations"); font-weight: 45 920; font-display: block; }
+  :root { color-scheme: dark; font-family: "Pretendard Variable", sans-serif; }
+  body { margin: 0; overflow: hidden; background: #101c19; }
+  svg { width: 100vw; height: 100vh; display: block; }
+  #controls { position: fixed; bottom: 12px; left: 50%; transform: translateX(-50%); display: flex; gap: 8px; align-items: center; padding: 6px 10px; border: 1px solid #fff3; border-radius: 8px; background: #101c19; }
+  #controls[hidden] { display: none; }
+  button { font: inherit; }
+</style>
+<body>
+<svg viewBox="0 0 960 540" role="img" aria-label="가상 제품 FORMA의 요청 정리 기능을 소개하는 8초 애니메이션">
+  <defs>
+    <radialGradient id="back" cx="51%" cy="50%" r="66%">
+      <stop stop-color="#274c3e"/><stop offset="1" stop-color="#101c19"/>
+    </radialGradient>
+    <linearGradient id="card" x2="0" y2="1" gradientUnits="objectBoundingBox">
+      <stop stop-color="#f3ffe9"/><stop offset="1" stop-color="#d7f3d0"/>
+    </linearGradient>
+    <pattern id="grid" width="32" height="32" patternUnits="userSpaceOnUse">
+      <path d="M32 0H0V32" fill="none" stroke="#b2f5d1" stroke-opacity=".12"/>
+    </pattern>
+    <clipPath id="titleClip"><rect x="0" y="88" width="960" height="72"/></clipPath>
+    <clipPath id="subtitleClip"><rect x="0" y="162" width="960" height="35"/></clipPath>
+  </defs>
+  <rect width="960" height="540" fill="url(#back)"/>
+  <rect id="gridLayer" x="-32" y="-32" width="1024" height="604" fill="url(#grid)"/>
+  <rect x="30" y="27" width="900" height="486" rx="16" fill="none" stroke="#a1c5b1" stroke-opacity=".28"/>
+  <g fill="#a5c8b3" font-size="12" font-weight="700" letter-spacing="2.2">
+    <text x="53" y="58">FORMA / PRODUCT MOTION</text>
+    <text x="907" y="58" text-anchor="end">CONCEPT DEMO</text>
+    <text id="beat" x="53" y="486">01 / REQUEST</text>
+    <text x="907" y="486" text-anchor="end">WORKSPACE SERIES</text>
+  </g>
+  <g clip-path="url(#titleClip)">
+    <text id="headline" x="480" y="147" fill="#f3ffe9" text-anchor="middle" font-size="49" font-weight="800" letter-spacing="-2"></text>
+  </g>
+  <g clip-path="url(#subtitleClip)">
+    <text id="subtitle" x="480" y="185" fill="#bddfcb" text-anchor="middle" font-size="19"></text>
+  </g>
+  <rect id="shadow" fill="#08100d" opacity=".44"/>
+  <rect id="surface" fill="url(#card)" stroke="#f0ffe6" stroke-width="2"/>
+  <g id="mark" fill="none" stroke="#1c4937" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M-21 2L-2 20L25 -20"/>
+  </g>
+  <g id="panel">
+    <text x="326" y="265" fill="#244c3c" font-size="17" font-weight="700">디자인 검토 요청</text>
+    <path d="M326 281H634" stroke="#90baa3"/>
+    <g fill="#244c3c" font-size="15" font-weight="600">
+      <text x="353" y="307">요청 내용</text><text x="353" y="337">담당자</text><text x="353" y="367">검토 상태</text>
+    </g>
+    <g id="checks" fill="none" stroke="#287558" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M328 301l5 5l9-10"/><path d="M328 331l5 5l9-10"/><path d="M328 361l5 5l9-10"/>
+    </g>
+    <rect x="548" y="345" width="85" height="30" rx="15" fill="#b2ddab"/>
+    <text x="590" y="365" text-anchor="middle" fill="#214b34" font-size="13" font-weight="700">정리 완료</text>
+  </g>
+  <text id="cta" x="480" y="325" fill="#1c4937" text-anchor="middle" font-size="24" font-weight="800">작업 공간 둘러보기</text>
+  <circle id="ripple" cx="0" cy="0" r="0" fill="none" stroke="#d6ffb7" stroke-width="3" opacity="0"/>
+  <g id="cursor" opacity="0">
+    <path d="M0 0V24L6.5 18L11 27.5L15 25.8L10.6 16.6H19Z" fill="#ffffff" stroke="#10201a" stroke-width="1.6" stroke-linejoin="round"/>
+  </g>
+  <rect x="360" y="478" width="240" height="2" fill="#adcdbb" fill-opacity=".23"/>
+  <rect id="progress" x="360" y="478" height="2" fill="#d6ffb7"/>
+</svg>
+<audio id="soundtrack" src="demo-audio.mp3" preload="none"></audio>
+<div id="controls" hidden>
+  <button id="play" type="button">일시 정지</button>
+  <button id="sound" type="button">소리 켜기</button>
+  <input id="seek" type="range" min="0" max="239" value="0" aria-label="재생 프레임">
+</div>
+<script>
+  const byId = (id) => document.getElementById(id);
+  const duration = 8;
+  const previewFps = 30;
+  const clamp = (number) => Math.min(1, Math.max(0, number));
+  const ease = (number) => {
+    const t = clamp(number);
+    return t * t * (3 - 2 * t);
+  };
+  const phase = (time, start, end) => ease((time - start) / (end - start));
+  const lerp = (a, b, t) => a + (b - a) * t;
+  const interpolate = (a, b, t) => a.map((value, index) => lerp(value, b[index], t));
+  const setAttrs = (id, attrs) => {
+    for (const [key, value] of Object.entries(attrs)) byId(id).setAttribute(key, value);
+  };
+  const icon = [433, 263, 94, 94, 47];
+  const app = [302, 226, 356, 168, 20];
+  const button = [345, 283, 270, 66, 33];
+  const copy = [
+    ['흩어진 작업 요청', '디자인 검토가 필요한 순간', '01 / REQUEST'],
+    ['요청을 한 화면에', '내용, 담당자, 상태를 확인하세요', '02 / ORGANIZE'],
+    ['FORMA', '팀의 작업 요청을 한곳에서', '03 / EXPLORE'],
+  ];
+
+  const fontReady = document.fonts.load('800 16px "Pretendard Variable"').then((faces) => {
+    if (!faces.length) throw new Error('fonts/PretendardVariable.woff2를 읽지 못했습니다.');
+  });
+
+  window.renderFrame = async (frame, fps) => {
+    await fontReady;
+    const t = Math.max(0, Math.min(frame / fps, duration));
+    const expand = phase(t, 1.7, 2.55);
+    const close = phase(t, 4.95, 5.85);
+    const [x, y, width, height, rx] = interpolate(interpolate(icon, app, expand), button, close);
+    const bob = 5 * Math.sin(t * 2.6) * (1 - expand);
+    const shape = { x, y: y + bob, width, height, rx };
+    setAttrs('surface', shape);
+    setAttrs('shadow', { ...shape, y: y + bob + 8 });
+    setAttrs('mark', { transform: `translate(480 ${310 + bob}) scale(${1 - expand * .4})`, opacity: 1 - phase(t, 1.75, 2.2) });
+    setAttrs('panel', { opacity: phase(t, 2.25, 2.65) * (1 - phase(t, 4.72, 5.04)) });
+    setAttrs('cta', { opacity: phase(t, 5.55, 5.95) });
+    [...byId('checks').children].forEach((path, i) => {
+      path.style.opacity = phase(t, 2.6 + i * .23, 2.75 + i * .23);
+    });
+
+    const index = t >= 5.2 ? 2 : t >= 2 ? 1 : 0;
+    const [headline, subtitle, beat] = copy[index];
+    const start = [0, 2, 5.2][index];
+    const exit = index === 2 ? 0 : phase(t, [1.7, 4.9][index], [2, 5.2][index]);
+    byId('headline').textContent = headline;
+    byId('subtitle').textContent = subtitle;
+    byId('beat').textContent = beat;
+    setAttrs('headline', { transform: `translate(0 ${72 * (1 - phase(t, start, start + .36)) - 72 * exit})` });
+    setAttrs('subtitle', { transform: `translate(0 ${40 * (1 - phase(t, start + .1, start + .52)) - 40 * exit})` });
+    setAttrs('gridLayer', { transform: `translate(${t * 2} ${t})` });
+    setAttrs('progress', { width: 240 * t / duration });
+
+    // 커서가 배지로 이동해 누르면 배지가 넓어진다(누름 1.55초, 확장 시작 1.7초).
+    const arrive = phase(t, 0.6, 1.35);
+    const press = phase(t, 1.48, 1.55) * (1 - phase(t, 1.55, 1.66));
+    const cursorX = lerp(700, 486, arrive);
+    const cursorY = lerp(470, 314 + bob, arrive);
+    setAttrs('cursor', {
+      transform: `translate(${cursorX} ${cursorY}) scale(${1 - press * 0.12})`,
+      opacity: phase(t, 0.45, 0.7) * (1 - phase(t, 1.85, 2.15)),
+    });
+    const ring = phase(t, 1.55, 2.0);
+    setAttrs('ripple', { cx: 480, cy: 310 + bob, r: 50 + ring * 70, opacity: t < 1.55 ? 0 : 0.9 * (1 - ring) });
+  };
+
+  if (!window.__CHOJEMA_RENDER__) {
+    const controls = byId('controls');
+    const play = byId('play');
+    const seek = byId('seek');
+    const sound = byId('sound');
+    const audio = byId('soundtrack');
+    let frame = 0;
+    let running = true;
+    let soundOn = false;
+    let start = performance.now();
+    controls.hidden = false;
+    if (audio) audio.preload = 'auto';
+    else sound.hidden = true;
+    function syncAudio() {
+      if (!audio) return;
+      if (soundOn && running) {
+        const time = frame / previewFps;
+        if (Math.abs(audio.currentTime - time) > 0.05) audio.currentTime = time;
+        if (audio.paused) audio.play().catch(() => {});
+      } else {
+        audio.pause();
+      }
+    }
+    function paint() {
+      window.renderFrame(frame, previewFps);
+      seek.value = frame;
+    }
+    function tick(now) {
+      if (running) {
+        const audioClock = audio && soundOn && !audio.paused;
+        frame = Math.min(239, Math.floor(audioClock ? audio.currentTime * previewFps : (now - start) * previewFps / 1000));
+        if (audioClock) start = now - frame * 1000 / previewFps;
+        if (frame === 239) {
+          running = false;
+          play.textContent = '다시 재생';
+          syncAudio();
+        }
+        paint();
+      }
+      requestAnimationFrame(tick);
+    }
+    play.addEventListener('click', () => {
+      if (frame === 239) frame = 0;
+      running = !running;
+      start = performance.now() - frame * 1000 / previewFps;
+      play.textContent = running ? '일시 정지' : '재생';
+      syncAudio();
+    });
+    sound.addEventListener('click', () => {
+      soundOn = !soundOn;
+      sound.textContent = soundOn ? '소리 끄기' : '소리 켜기';
+      start = performance.now() - frame * 1000 / previewFps;
+      syncAudio();
+    });
+    seek.addEventListener('input', () => {
+      running = false;
+      syncAudio();
+      frame = Number(seek.value);
+      play.textContent = frame === 239 ? '다시 재생' : '재생';
+      paint();
+    });
+    paint();
+    requestAnimationFrame(tick);
+  }
+</script>
+</body>
+</html>

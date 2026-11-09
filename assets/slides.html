@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chojema Visual 발표 견본</title>
+<style>
+@font-face{font-family:Pretendard;src:url('fonts/PretendardVariable.woff2') format('woff2');font-display:swap}
+*{box-sizing:border-box}body{margin:0;background:#101827;color:#f5f7fb;font-family:Pretendard,system-ui,sans-serif}
+main{min-height:100svh;display:grid;place-items:center;padding:2rem 2rem 6rem}
+.slide{width:min(100%,72rem);padding:clamp(1rem,4vw,4rem);--progress:1}
+[hidden]{display:none!important}.eyebrow{color:#8fc9ff;font-size:1rem;letter-spacing:.1em}
+h1,h2{font-size:clamp(2rem,5vw,4.8rem);line-height:1.2;margin:1rem 0 2rem;max-width:18ch}
+p{font-size:clamp(1rem,2.5vw,1.8rem);line-height:1.65;max-width:38em;color:#c7d2e3}
+.reveal{opacity:var(--progress);transform:translateY(calc((1 - var(--progress))*24px))}
+.steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem;margin-top:2rem}
+.step{border:1px solid #46556c;border-radius:1rem;padding:1.5rem;min-height:8rem;font-size:1.3rem}
+.step strong{display:block;color:#8fc9ff;margin-bottom:1rem}.note{font-size:1rem}
+nav{position:fixed;bottom:0;left:0;right:0;display:flex;align-items:center;justify-content:center;gap:1rem;padding:1rem;background:#101827}
+button{font:inherit;color:inherit;background:#22324a;border:1px solid #8194ae;border-radius:.5rem;padding:.65rem 1rem;cursor:pointer}
+button:focus-visible{outline:3px solid #8fc9ff;outline-offset:4px}button:disabled{opacity:.45;cursor:default}
+@media(max-width:640px){main{padding:1rem 1rem 6rem}.steps{grid-template-columns:1fr}.step{min-height:auto}}
+@media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none}}
+@media print{body{background:white;color:#111}main{display:block;padding:0}main .slide{display:block!important;min-height:90vh;break-after:page;padding:2rem}.slide:last-child{break-after:auto}.reveal{opacity:1;transform:none}p,.eyebrow,.step strong{color:#222}.step{border-color:#444}nav{display:none}}
+</style>
+</head>
+<body>
+<main aria-label="발표 자료">
+  <section class="slide" aria-labelledby="title-1">
+    <div class="eyebrow">CHOJEMA VISUAL</div>
+    <h1 id="title-1" class="reveal">아이디어를<br>보이는 이야기로</h1>
+    <p class="reveal">한 장의 설명부터 움직이는 장면까지.<br>내용에 필요한 표현을 선택합니다.</p>
+    <p class="note">발표 견본입니다. 문구와 시각 요소를 작업에 맞게 바꾸세요.</p>
+  </section>
+  <section class="slide" aria-labelledby="title-2" hidden inert>
+    <div class="eyebrow">제작 과정</div>
+    <h2 id="title-2" class="reveal">핵심을 먼저,<br>움직임은 그다음</h2>
+    <div class="steps reveal">
+      <div class="step"><strong>01 이해</strong>전달할 메시지를 정합니다.</div>
+      <div class="step"><strong>02 표현</strong>관계와 변화를 보여 줍니다.</div>
+      <div class="step"><strong>03 확인</strong>읽히고 이해되는지 봅니다.</div>
+    </div>
+  </section>
+  <section class="slide" aria-labelledby="title-3" hidden inert>
+    <div class="eyebrow">다음 단계</div>
+    <h2 id="title-3" class="reveal">이야기에 맞는<br>크기로 시작하세요</h2>
+    <p class="reveal">필요한 내용에 집중하고,<br>설명할 때는 화면을 멈출 수 있습니다.</p>
+  </section>
+</main>
+<nav aria-label="발표 자료 탐색">
+  <button id="previous" type="button">이전</button>
+  <span id="status" role="status" aria-live="polite"></span>
+  <button id="next" type="button">다음</button>
+  <button id="replay" type="button">다시 보기</button>
+</nav>
+<script>
+const slides = [...document.querySelectorAll('.slide')];
+const previous = document.getElementById('previous');
+const next = document.getElementById('next');
+const status = document.getElementById('status');
+const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
+let current = 0;
+let animation;
+window.renderSlide = (index, progress = 1) => {
+  if (!Number.isInteger(index) || index < 0 || index >= slides.length ||
+      !Number.isFinite(progress) || progress < 0 || progress > 1) throw new RangeError('Invalid slide state');
+  cancelAnimationFrame(animation);
+  current = index;
+  slides.forEach((slide, i) => {
+    slide.hidden = i !== index;
+    slide.inert = i !== index;
+    slide.setAttribute('aria-hidden', String(i !== index));
+  });
+  slides[index].style.setProperty('--progress', progress);
+  previous.disabled = index === 0;
+  next.disabled = index === slides.length - 1;
+  status.textContent = `${index + 1} / ${slides.length}`;
+};
+function show(index) {
+  index = Math.max(0, Math.min(slides.length - 1, index));
+  if (reducedMotion.matches) return window.renderSlide(index);
+  const start = performance.now();
+  const tick = (now) => {
+    // rAF timestamps mark the frame start and can precede `start`; clamp so progress never goes negative.
+    const progress = Math.min(1, Math.max(0, (now - start) / 450));
+    window.renderSlide(index, 1 - (1 - progress) ** 3);
+    if (progress < 1) animation = requestAnimationFrame(tick);
+  };
+  window.renderSlide(index, 0);
+  animation = requestAnimationFrame(tick);
+}
+previous.addEventListener('click', () => show(current - 1));
+next.addEventListener('click', () => show(current + 1));
+document.getElementById('replay').addEventListener('click', () => show(current));
+document.addEventListener('keydown', (event) => {
+  if (event.altKey || event.ctrlKey || event.metaKey ||
+      event.target.closest('input,textarea,select,[contenteditable="true"]')) return;
+  if (['ArrowRight', 'PageDown', 'ArrowLeft', 'PageUp', 'Home', 'End'].includes(event.key)) {
+    event.preventDefault();
+    show(event.key === 'Home' ? 0 : event.key === 'End' ? slides.length - 1 :
+      current + (['ArrowRight', 'PageDown'].includes(event.key) ? 1 : -1));
+  }
+});
+window.renderSlide(0);
+</script>
+</body>
+</html>
