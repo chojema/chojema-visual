@@ -207,9 +207,9 @@ This design limits what is read to the type and size of the task; it is not a me
 | [agents/openai.yaml](agents/openai.yaml) | Display name and default prompt |
 | `references/` | Guides for 3D, 2D motion, product videos, showreels, editing, presentations, rendering and audio (in Korean) |
 | `scripts/` | HTML video renderer, transcript-based editing tools, beat grid calculator |
-| `assets/` | HTML video and slide deck samples, Blender scene sample, templates, three Korean fonts and synthesized audio |
+| `assets/` | HTML video and slide deck samples, Blender scene sample, templates, synthesized audio, three Korean fonts (Pretendard, Gowun Batang, Gowun Dodum; usage in [runtime and sources](references/sources.md), in Korean) |
 | [tests/helpers.test.mjs](tests/helpers.test.mjs) | Automated tests for editing, transcript conversion, beat grid, HTML renderer and Blender sample |
-| [LICENSE](LICENSE) | MIT License (the three fonts follow the OFL notices in `assets/fonts`) |
+| [LICENSE](LICENSE) | MIT License |
 | [CHANGELOG.md](CHANGELOG.md) | Changes per version (in Korean) |
 | [README.md](README.md) / [README.en.md](README.en.md) | Installation and usage guide in Korean / English |
 
@@ -248,7 +248,7 @@ node --test tests/helpers.test.mjs
 
 The tests cover beat grid ranges, merging of cut ranges, transcript retiming, chained edits, Whisper output conversion, renderer argument checks, input validation and protection of existing files. With FFmpeg installed they also check a real edit of a synthetic video, including output streams and duration; without it those tests are skipped. Set `CHOJEMA_PLAYWRIGHT` (the Playwright package path) and, if needed, `CHOJEMA_BROWSER` (a headless Chromium executable) to test real MP4 output from the HTML renderer. Set `CHOJEMA_BLENDER` to the path of `blender.exe` (not `blender-launcher.exe`) to test building and rendering the Blender sample scene.
 
-The following was verified for version 1.3.0 on 2026-11-09.
+The following was verified for version 1.3.1 on 2026-11-09.
 
 | Area | Verified |
 | --- | --- |
@@ -268,8 +268,16 @@ Sources are preserved and results are saved to separate paths by default. The in
 
 Real product logos, screens and features are used only from the materials you provide. Prepare music, voice, photos and models that you are allowed to use. An HTML slide deck, an editable PowerPoint file and a recorded presentation video are different deliverables, so specify the format you need.
 
-Three Korean typefaces are bundled: Pretendard (default, variable weight), Gowun Batang (headlines and quotes, 400 and 700) and Gowun Dodum (body text and captions, 400). All three are under the SIL Open Font License 1.1 and ship with their notices ([Pretendard](assets/fonts/Pretendard-OFL.txt), [Gowun Batang](assets/fonts/GowunBatang-OFL.txt), [Gowun Dodum](assets/fonts/GowunDodum-OFL.txt)). Keep the notice when you include a font in your outputs. Details on runtime requirements and bundled assets are in [runtime and sources](references/sources.md) (in Korean).
+When you include a bundled font in your outputs, keep that font's OFL notice file in the same folder ([License](#license)). Font usage and weights, runtime requirements and bundled assets are described in [runtime and sources](references/sources.md) (in Korean).
 
 ## License
 
-The documents, scripts and samples are provided under the [MIT License](LICENSE). The bundled Pretendard, Gowun Batang and Gowun Dodum fonts follow their own SIL Open Font License 1.1 notices (`assets/fonts/*-OFL.txt`) and are not covered by the MIT License. Changes per version are in the [changelog](CHANGELOG.md).
+The documents, scripts and samples are provided under the [MIT License](LICENSE).
+
+The bundled fonts are not covered by the MIT License; each follows its own SIL Open Font License 1.1.
+
+| Font | Copyright | License notice |
+| --- | --- | --- |
+| Pretendard | Kil Hyung-jin | [Pretendard-OFL.txt](assets/fonts/Pretendard-OFL.txt) |
+| Gowun Batang | The Gowun Batang Project Authors (designer Yanghee Ryu) | [GowunBatang-OFL.txt](assets/fonts/GowunBatang-OFL.txt) |
+| Gowun Dodum | The Gowun Dodum Project Authors (designer Yanghee Ryu) | [GowunDodum-OFL.txt](assets/fonts/GowunDodum-OFL.txt) |

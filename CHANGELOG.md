@@ -1,5 +1,10 @@
 # 변경 기록
 
+## 1.3.1 (2026-11-09)
+
+- README의 글꼴 라이선스 안내를 라이선스 섹션 한 곳으로 모았다. 글꼴별 저작권자와 고지 파일을 표로 정리하고, 자료와 결과물 관리 섹션에는 고지 파일을 함께 두라는 규칙과 링크만 남겼다. 영문 README도 같게 정리했다.
+- `references/sources.md`에 Pretendard의 예약 글꼴 이름(Reserved Font Name) 규칙을 추가했다. 수정한 파일은 Pretendard라는 이름으로 배포하지 않는다.
+
 ## 1.3.0 (2026-11-09)
 
 - `references/presentations.md`에 PowerPoint 기본 애니메이션 제작 방법을 넣었다. python-pptx로 편집 가능한 도형을 만들고 `p:timing` XML로 이동 경로와 회전을 넣는 실행 예시, 단위 규칙(슬라이드 비율 좌표, 각도 × 60000, 굴림 회전각), 자동·클릭 시작 구조, PowerPoint COM으로 애니메이션 목록 확인과 영상 내보내기를 포함한다.

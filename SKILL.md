@@ -4,7 +4,7 @@ description: Creates or edits visual content using only the production modules a
 license: MIT (see LICENSE; bundled Pretendard, Gowun Batang and Gowun Dodum fonts are OFL-1.1)
 metadata:
   author: Chojema
-  version: "1.3.0"
+  version: "1.3.1"
 ---
 
 # Chojema Visual
