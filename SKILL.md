@@ -1,10 +1,10 @@
 ---
 name: chojema-visual
-description: Create or edit visual content using only the modules the request needs - Blender models, materials, lighting, renders and 3D animation; 2D motion graphics and HTML/SVG/Canvas scenes rendered to MP4; product demos, ads and music-synced showreels; footage editing, transcription, silence removal, subtitles and audio; animated HTML decks; and editable PowerPoint (.pptx) visual elements, diagrams, SmartArt, shapes, graphics, data charts, animations and slide transitions. Use for a single element or slide fix through multi-scene productions in English or Korean (블렌더, 모션 그래픽, 영상 편집, 발표 자료, 파워포인트, 스마트아트, 다이어그램, 도형, 차트, 애니메이션, 전환 효과).
+description: Create or edit visual content using only the modules the request needs - Blender models, materials, lighting, renders and 3D animation; lightweight three.js/WebGL 3D in HTML scenes and decks; 2D motion graphics and HTML/SVG/Canvas scenes rendered to MP4; product demos, ads and music-synced showreels; footage editing, transcription, silence removal, subtitles and audio; animated HTML decks; and editable PowerPoint (.pptx) visual elements, diagrams, SmartArt, shapes, graphics, data charts, animations and slide transitions. Use for a single element or slide fix through multi-scene productions in English or Korean (블렌더, 웹 3D, 모션 그래픽, 영상 편집, 발표 자료, 파워포인트, 스마트아트, 다이어그램, 도형, 차트, 애니메이션, 전환 효과).
 license: MIT (see LICENSE; bundled Pretendard, Gowun Batang and Gowun Dodum fonts are OFL-1.1)
 metadata:
   author: Chojema
-  version: "1.4.0"
+  version: "1.5.0"
 ---
 
 # Chojema Visual
@@ -19,13 +19,14 @@ metadata:
 
 | 요청 | 처음 읽을 문서 | 필요한 경우에만 추가 |
 | --- | --- | --- |
-| Blender 모델, 재질, 조명, 정지 이미지, 3D 애니메이션 | [3D 제작](references/blender.md) | 영상 합성은 편집, 소리가 필요하면 오디오 |
+| Blender 모델, 재질, 조명, 정지 이미지, 3D 애니메이션 | [3D 제작](references/blender.md) | 영상 합성은 편집, 소리가 필요하면 오디오, 웹 장면으로 넘길 때 three.js |
+| HTML 장면이나 발표 자료 안의 가벼운 실시간 3D(three.js, WebGL) | [three.js 3D](references/threejs.md) | MP4 출력은 렌더링, 실사 품질이나 복잡한 장면은 3D 제작 |
 | 글자나 도형의 움직임, 2D 장면 | [2D 모션](references/motion.md) | MP4 출력은 렌더링 |
 | 제품 광고, 앱 시연 | [제품 영상](references/product-film.md) | 사용하는 엔진의 제작 지침 |
 | 브랜드 쇼릴, 음악 박자에 맞춘 영상 | [모션 쇼릴](references/showreel.md) | 사용하는 엔진의 제작 지침, 오디오 |
 | 자르기, 전사, 무음 제거, 실수 편집, 자막, 촬영본 합성 | [영상 편집](references/editing.md) | 새 장면이 필요할 때만 2D나 3D |
 | PowerPoint 시각 요소, 다이어그램, 스마트아트, 도형, 그래픽, 차트, 애니메이션과 전환 효과 | [PowerPoint 시각 요소](references/powerpoint.md) | XML 이동 경로와 회전 예제가 필요할 때만 발표 자료의 해당 절 |
-| HTML 발표 자료, 여러 장의 발표 구성 | [발표 자료](references/presentations.md) | PowerPoint 출력은 PowerPoint 시각 요소, 별도 3D 자산은 3D |
+| HTML 발표 자료, 여러 장의 발표 구성 | [발표 자료](references/presentations.md) | PowerPoint 출력은 PowerPoint 시각 요소, 장 안의 실시간 3D는 three.js, 별도 3D 자산은 3D |
 
 ## 실행 범위
 

@@ -13,6 +13,7 @@ The skill's description is written so agents recognize requests in English or Ko
 | Area | Examples | Output |
 | --- | --- | --- |
 | Blender 3D | Modeling, materials, lighting, cameras, still renders, animation | `.blend`, images, frame sequences, video |
+| three.js 3D | Spinning logos, product turntables, 3D charts, particles and Blender models (`.glb`) inside HTML scenes and decks | HTML, MP4 |
 | 2D motion graphics | Moving type and shapes, shape morphs, scene transitions | HTML, video |
 | Product videos | Demos built from real app screens, feature explainers, product ads | HTML, MP4 |
 | Motion showreels | Brand motif transformations, music-synced cuts | Video |
@@ -139,6 +140,7 @@ Prepare only the tools your task needs. The skill provides production instructio
 | Local transcription | FFmpeg 8.0 or later with Whisper support and a [whisper.cpp model](https://huggingface.co/ggerganov/whisper.cpp), or another local transcription tool |
 | Transcript-based video edits | Node.js, [FFmpeg and FFprobe](https://ffmpeg.org/download.html), the source video and transcript |
 | Local HTML to MP4 | Node.js 22 or later, [Playwright and Chromium](https://playwright.dev/docs/browsers), FFmpeg with `libx264` |
+| three.js 3D scenes | [three.js](https://threejs.org/) files kept inside the project. MP4 output uses the HTML setup above; browser preview needs a local server |
 | Existing HyperFrames or GSAP projects | The runtime configured in that project |
 
 The Blender sample's Python script runs in Blender's bundled Python. Detailed setup and output commands are in [3D production](references/blender.md), [HTML rendering](references/rendering.md) and [footage editing](references/editing.md) (in Korean).
@@ -217,10 +219,10 @@ This design limits what is read to the type and size of the task; it is not a me
 | --- | --- |
 | [SKILL.md](SKILL.md) | Skill identifier, task routing and shared production rules |
 | [agents/openai.yaml](agents/openai.yaml) | Display name and default prompt |
-| `references/` | Guides for 3D, 2D motion, product videos, showreels, editing, PowerPoint visual elements, presentations, rendering and audio (in Korean) |
+| `references/` | Guides for 3D, three.js 3D, 2D motion, product videos, showreels, editing, PowerPoint visual elements, presentations, rendering and audio (in Korean) |
 | `scripts/` | HTML video renderer, transcript-based editing tools, beat grid calculator |
 | `assets/` | HTML video and slide deck samples, Blender scene sample, templates, synthesized audio, three Korean fonts (Pretendard, Gowun Batang, Gowun Dodum; usage in [runtime and sources](references/sources.md), in Korean) |
-| [tests/helpers.test.mjs](tests/helpers.test.mjs) | Automated tests for editing, transcript conversion, beat grid, HTML renderer and Blender sample |
+| [tests/helpers.test.mjs](tests/helpers.test.mjs) | Automated tests for editing, transcript conversion, beat grid, HTML renderer (including the first WebGL frame) and Blender sample |
 | [LICENSE](LICENSE) | MIT License |
 | [CHANGELOG.md](CHANGELOG.md) | Changes per version (in Korean) |
 | [README.md](README.md) / [README.en.md](README.en.md) | Installation and usage guide in Korean / English |
@@ -277,6 +279,8 @@ Separate HyperFrames projects and PowerPoint playback on macOS were not part of 
 The PowerPoint module in version 1.4.0 was additionally checked on November 9, 2026, using PowerPoint 16.0 and Python 3.13 COM automation. Twelve key checks passed, covering real SmartArt and Korean text, attached connectors after moving a shape, embedded chart data and retained values, shape merging, saved and reopened animations and transitions, and click progression in a windowed slide show. Four static renders were inspected. The initial PowerShell COM test did not complete, so testing switched to Python; the full PowerShell path is not verified.
 
 Morph, all effects and SmartArt layouts, object-click triggers, SVG path editing, matching styles in existing complex decks, accessibility UI checks, other operating systems, and actual skill reloading in other agents remain unverified. The module provides production instructions and uses the tools available for each task. Of the 17 basic package tests, 15 passed; real HTML rendering and Blender tests were skipped because their environment variables were not set. These results are separate from the full rendering checks recorded above for version 1.3.1.
+
+The three.js module in version 1.5.0 was checked on 2026-11-13 on Windows with Playwright 1.51.1 and its headless Chromium shell, three.js r170 and FFmpeg 8.0. A scene that loads local ES modules and a `.glb` was rendered with `render-html.mjs` to a 60-frame MP4; the model is visible from the first frame and the same frame matches when rendered in a different order. The renderer's default WebGL path left roughly the first 27 frames blank, so it now pins SwiftShader, and an automated test covers this. The Blender 5.2.3 LTS sample scene was exported to `.glb`, rendered in three.js and compared with Blender renders at frames 1, 19, 37, 55 and 72. Bevelled geometry, camera framing, material colour and rotation (56.25°, 180°, 303.75° and so on) matched. This check found that modifiers need an explicit apply option, cameras need to be exported, and the key times are one frame late unless offset; the guide now covers all three. Lights and shadows do not carry over through glTF, so shading differs. With both Blender and Playwright environment variables set, all 18 automated tests passed. GPU-backed environments, other operating systems, other three.js versions and 3D inside presentation decks remain unverified.
 
 ## Sources and outputs
 

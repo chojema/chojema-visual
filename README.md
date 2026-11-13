@@ -11,6 +11,7 @@
 | 분야 | 작업 예시 | 결과물 |
 | --- | --- | --- |
 | Blender 3D | 모델링, 재질, 조명, 카메라, 정지 렌더, 애니메이션 | `.blend`, 이미지, 프레임 시퀀스, 영상 |
+| three.js 3D | HTML 장면과 발표 자료 안의 회전 로고, 제품 턴테이블, 3D 차트, 파티클, Blender 모델(`.glb`) 표시 | HTML, MP4 |
 | 2D 모션 그래픽 | 글자와 도형의 움직임, 형태 변환, 장면 전환 | HTML, 영상 |
 | 제품 영상 | 실제 앱 화면을 이용한 시연, 기능 설명, 제품 광고 | HTML, MP4 |
 | 모션 쇼릴 | 브랜드 모티프 변형, 음악 박자에 맞춘 구성 | 영상 |
@@ -137,6 +138,7 @@ Antigravity와 OpenCode를 포함해 여러 에이전트에 공통 배포하려�
 | 로컬 전사 | Whisper 지원 FFmpeg 8.0 이상과 [whisper.cpp 모델](https://huggingface.co/ggerganov/whisper.cpp), 또는 다른 로컬 전사 도구 |
 | 전사 기반 영상 편집 | Node.js, [FFmpeg와 FFprobe](https://ffmpeg.org/download.html), 원본 영상과 전사문 |
 | 로컬 HTML의 MP4 출력 | Node.js 22 이상, [Playwright와 Chromium](https://playwright.dev/docs/browsers), `libx264`를 지원하는 FFmpeg |
+| three.js 3D 장면 | 프로젝트 안에 둔 [three.js](https://threejs.org/) 파일. MP4 출력은 위 HTML 출력 환경, 브라우저 미리보기는 로컬 서버 |
 | 기존 HyperFrames, GSAP 프로젝트 | 해당 프로젝트에 설정된 실행 환경 |
 
 Blender 견본의 Python 스크립트는 Blender 내장 Python에서 실행합니다. 세부 준비와 출력 명령은 [3D 제작](references/blender.md), [HTML 렌더링](references/rendering.md), [영상 편집](references/editing.md)에 있습니다.
@@ -215,10 +217,10 @@ $chojema-visual proposal.pptx의 3쪽 설명을 편집 가능한 흐름도로 �
 | --- | --- |
 | [SKILL.md](SKILL.md) | 스킬 식별자, 작업 선택과 공통 제작 지침 |
 | [agents/openai.yaml](agents/openai.yaml) | 표시 이름과 기본 호출 문구 |
-| `references/` | 3D, 2D 모션, 제품 영상, 쇼릴, 편집, PowerPoint 시각 요소, 발표 자료, 렌더링, 오디오 지침 |
+| `references/` | 3D, three.js 3D, 2D 모션, 제품 영상, 쇼릴, 편집, PowerPoint 시각 요소, 발표 자료, 렌더링, 오디오 지침 |
 | `scripts/` | HTML 영상 렌더러, 전사 기반 편집, 박자표 계산 도구 |
 | `assets/` | HTML 영상과 발표 자료 견본, Blender 장면 견본, 서식, 합성 오디오, 한국어 글꼴 3종(Pretendard, Gowun Batang, Gowun Dodum. 용도는 [실행 환경과 자료 출처](references/sources.md)) |
-| [tests/helpers.test.mjs](tests/helpers.test.mjs) | 편집, 전사 변환, 박자표, HTML 렌더러, Blender 견본의 자동 검사 |
+| [tests/helpers.test.mjs](tests/helpers.test.mjs) | 편집, 전사 변환, 박자표, HTML 렌더러(WebGL 첫 프레임 포함), Blender 견본의 자동 검사 |
 | [LICENSE](LICENSE) | MIT 라이선스 |
 | [CHANGELOG.md](CHANGELOG.md) | 버전별 변경 기록 |
 | [README.md](README.md) / [README.en.md](README.en.md) | 한국어 / 영어 설치와 사용 안내 |
@@ -275,6 +277,8 @@ node --test tests/helpers.test.mjs
 버전 1.4.0의 PowerPoint 전문 모듈은 2026. 11. 09.에 PowerPoint 16.0과 Python 3.13 COM 경로로 추가 확인했습니다. 실제 스마트아트와 한글 문구, 도형 이동 후 연결선 유지, 내장 차트 데이터와 값 보존, 도형 병합, 애니메이션과 전환의 저장·재열기, 창 모드 슬라이드 쇼의 클릭 진행 등 주요 검사 12개가 통과했고 정지 렌더 4장을 확인했습니다. 초기 PowerShell COM 시험은 완료하지 못해 Python 경로로 전환했으며, PowerShell 경로 전체를 검증한 것은 아닙니다.
 
 모핑, 모든 효과와 스마트아트 레이아웃, 개체 클릭 트리거, SVG 경로 편집, 기존 복합 자료의 스타일 계승, 접근성 UI, 다른 운영체제와 에이전트의 실제 스킬 재로딩은 미검증입니다. 이 모듈은 제작 지침이며 작업마다 사용 가능한 도구로 수행합니다. 패키지 기본 자동 검사 17개 중 15개가 통과했고 HTML 실제 렌더와 Blender 검사 2개는 환경 변수를 지정하지 않아 건너뛰었습니다. 위 1.3.1의 전체 렌더 검증 기록과 구분합니다.
+
+버전 1.5.0의 three.js 모듈은 2026. 11. 13.에 Windows, Playwright 1.51.1과 Chromium 헤드리스 셸, three.js r170, FFmpeg 8.0으로 확인했습니다. 로컬 ES 모듈과 `.glb`를 읽는 장면을 `render-html.mjs`로 60프레임 MP4로 출력해 첫 프레임부터 모델이 보이는지, 같은 프레임을 다른 순서로 출력해도 같은지 확인했습니다. 렌더러의 기본 WebGL 경로는 처음 약 27프레임을 빈 화면으로 남겨 SwiftShader 고정 옵션을 추가했고, 이를 잡는 자동 검사를 넣었습니다. Blender 5.2.3 LTS로 견본 장면을 `.glb`로 내보내 three.js에서 렌더하고 Blender 렌더와 프레임 1, 19, 37, 55, 72를 비교했습니다. 베벨 형상, 카메라 구도, 재질 색과 회전각(56.25°, 180°, 303.75° 등)이 일치했습니다. 이 과정에서 수정자 적용 옵션, 카메라 내보내기, 한 프레임 늦는 키 시간 문제를 찾아 문서에 반영했습니다. 조명과 그림자는 glTF로 넘어가지 않아 명암은 다릅니다. Blender와 Playwright 환경 변수를 모두 지정해 자동 검사 18개가 전부 통과했습니다. GPU 사용 환경, 다른 운영체제, three.js 다른 버전, 발표 자료 안의 3D 동작은 미검증입니다.
 
 ## 자료와 결과물 관리
 

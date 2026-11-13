@@ -229,6 +229,24 @@ test('HTML renderer outputs the requested frames when CHOJEMA_PLAYWRIGHT is set'
   assert.deepEqual([stream.color_space, stream.color_transfer, stream.color_primaries], ['bt709', 'bt709', 'bt709']);
 });
 
+test('HTML renderer draws WebGL from a local ES module on the first frame when CHOJEMA_PLAYWRIGHT is set', (t) => {
+  if (!process.env.CHOJEMA_PLAYWRIGHT) return t.skip('Set CHOJEMA_PLAYWRIGHT (and optionally CHOJEMA_BROWSER) to run');
+  const dir = workspace(t);
+  writeFileSync(join(dir, 'color.mjs'), 'export const red = [1, 0, 0, 1];');
+  writeFileSync(join(dir, 'gl.html'), `<!doctype html><style>html,body{margin:0;overflow:hidden;background:#000}canvas{display:block;width:100vw;height:100vh}</style>
+<canvas></canvas><script type="module">
+import { red } from './color.mjs';
+const gl = document.querySelector('canvas').getContext('webgl2', { preserveDrawingBuffer: true });
+window.renderFrame = () => { gl.clearColor(...red); gl.clear(gl.COLOR_BUFFER_BIT); };
+</script>`);
+  const out = join(dir, 'gl.mp4');
+  const browser = process.env.CHOJEMA_BROWSER ? ['--browser', process.env.CHOJEMA_BROWSER] : [];
+  const result = run('render-html.mjs', [join(dir, 'gl.html'), out, '--playwright', process.env.CHOJEMA_PLAYWRIGHT, ...browser, '--width', '64', '--height', '36', '--fps', '30', '--frames', '2']);
+  assert.equal(result.status, 0, result.stderr);
+  const pixel = spawnSync('ffmpeg', ['-v', 'error', '-i', out, '-frames:v', '1', '-vf', 'scale=1:1', '-f', 'rawvideo', '-pix_fmt', 'rgb24', 'pipe:']).stdout;
+  assert.ok(pixel[0] > 200 && pixel[1] < 50, `frame 0 must show the WebGL canvas, got rgb(${[...pixel]})`);
+});
+
 test('Blender sample scene builds and renders when CHOJEMA_BLENDER is set', (t) => {
   if (!process.env.CHOJEMA_BLENDER) return t.skip('Set CHOJEMA_BLENDER to blender.exe (not blender-launcher.exe) to run');
   const dir = workspace(t);

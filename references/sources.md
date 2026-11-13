@@ -8,6 +8,7 @@
 | --- | --- |
 | Blender 모델과 장면 | 사용 가능한 Blender 연결 도구 또는 Blender 실행 파일 |
 | 로컬 HTML을 MP4로 출력 | Node.js, Playwright와 Chromium, FFmpeg |
+| three.js 3D 장면 | 프로젝트 안에 둔 three.js 파일. MP4 출력은 위 HTML 출력 환경, 미리보기는 로컬 서버 |
 | 전사 기반 편집 | Node.js, 실제 편집 시 FFmpeg와 FFprobe |
 | 로컬 전사 | Whisper 지원 FFmpeg(8.0 이상)와 whisper.cpp 모델 파일, 또는 다른 로컬 전사 도구 |
 | 박자표 계산 | Node.js |

@@ -34,6 +34,6 @@ ffmpeg -n -framerate 24 -start_number 1 -i frames/frame_%04d.png -frames:v 72 -v
 
 투명 배경은 Film Transparent와 PNG RGBA로 출력한다. 알파가 필요한 시퀀스를 불투명 MP4로 먼저 바꾸지 않는다. 합성할 레이어의 비율, fps, 해상도와 색을 맞춘다.
 
-실사와 연결할 때는 실제 접합 프레임을 뽑아 물체 위치, 크기, 회전, 카메라 각도와 광원 방향을 맞춘다. 전환 앞뒤의 중복, 속도와 색 변화를 확인한다. 음향이 필요할 때만 [오디오](audio.md), 별도 편집이 필요할 때만 [영상 편집](editing.md)을 읽는다.
+실사와 연결할 때는 실제 접합 프레임을 뽑아 물체 위치, 크기, 회전, 카메라 각도와 광원 방향을 맞춘다. 전환 앞뒤의 중복, 속도와 색 변화를 확인한다. 음향이 필요할 때만 [오디오](audio.md), 별도 편집이 필요할 때만 [영상 편집](editing.md)을 읽는다. 모델을 HTML 장면의 실시간 3D로 쓰면 `.glb`로 내보내고 [three.js 3D](threejs.md)를 따른다.
 
 공식 자료: [Blender 명령줄 렌더링](https://docs.blender.org/manual/en/latest/advanced/command_line/render.html), [Blender Python API](https://docs.blender.org/api/current/).

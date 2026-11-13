@@ -32,7 +32,12 @@ async function renderFrames(options, directory) {
     throw new Error('Playwright could not be loaded. See references/rendering.md or supply --playwright.', { cause: error });
   }
 
-  const browser = await chromium.launch({ executablePath });
+  // file:// ES 모듈(three.js 등)과 XHR 로드를 허용한다. 컨텍스트가 오프라인이라 외부 전송은 없다.
+  // WebGL은 ANGLE SwiftShader로 고정한다. 기본 Vulkan 경로는 처음 약 27번의 그림을 화면에 늦게 올려 앞 프레임이 빈 화면이 된다.
+  const browser = await chromium.launch({
+    executablePath,
+    args: ['--allow-file-access-from-files', '--use-angle=swiftshader', '--enable-unsafe-swiftshader'],
+  });
   try {
     const context = await browser.newContext({
       viewport: { width, height },
